@@ -2,7 +2,7 @@
 
 //echo '<a href="/tournament/index.php">Proceed...</a>';
 
-// Database Class testing
+// Database Class testing test
 
 include '../includes/functions.php';
 
