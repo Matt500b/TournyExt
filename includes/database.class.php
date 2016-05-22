@@ -16,6 +16,7 @@ $selData = [
 		];
 $data = $db->QUERY($selData);
  */
+
 class database{
     protected $link, $num_rows, $debug;   
 	protected $rs = array();
@@ -27,6 +28,43 @@ class database{
 		$this->debug = $debug;
     }
 
+	/* UPDATE DATA IN DATABASE */
+	public function UPDATE($sql, $args=null) {
+		unset($this->rs);
+		unset($this->err);
+		$this->rs = array();
+		$this->err = array();
+
+		$match = $this->match_sql($sql, "update");
+		if (!$match) {
+			array_push($this->err, 'You tried to use the wrong method for your query');
+		}
+		else {
+			if ($stmt = $this->link->prepare($sql)) {
+				if (isset($args)) {
+					$method = new ReflectionMethod('mysqli_stmt', 'bind_param');
+					$method->invokeArgs($stmt, $this->refValues($args));
+				}
+				if (!$stmt->execute()) {
+					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+				}
+				array_push($this->rs, "Update Successful");
+			} else {
+				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+			}
+			$stmt->close();
+		}
+
+		if(!empty($this->err)) {
+			if($this->debug) {
+				return $this->err;
+			}
+		}
+		else {
+			return $this->rs;
+		}
+
+	}
 	/* SELECT DATA FROM DATABASE */
 	public function SELECT($sql, $args=null) {
 		unset($this->rs);

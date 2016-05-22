@@ -3,8 +3,9 @@
 
                     <div id="logo"></div>
                     <div id="menu"></div>
-                    <div id="user"></div>
+                    <div id="user">
+
+                    </div>
 
                 </div>
             </div>
-            
