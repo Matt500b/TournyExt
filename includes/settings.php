@@ -12,3 +12,5 @@ if(DEBUG) {
 else {
 	error_reporting(0);
 }
+
+//test
