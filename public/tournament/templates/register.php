@@ -18,10 +18,10 @@ include_once '../../includes/register.inc.php';
       <label for="email">Email</label>
       <input type="email" name="email" id="email" value="">
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="">
-      <label for="">Repeat Password</label>
-      <input type="password" name="password" id="passwordconfirm"  value="">
-      <input type="button" value="Register" onclick="return regformhash(this.form,this.form.username,this.form.email, this.form.password,this.form.passwordconfirm);" <="" form="">
+      <input type="password" name="password" id="password" placeholder="••••••••••••" value="">
+      <label for="confirmpwd">Repeat Password</label>
+      <input type="password" name="confirmpwd" id="confirmpwd" placeholder="••••••••••••" value="" />
+      <input type="button" value="Register" onclick="return regformhash(this.form,this.form.username,this.form.email, this.form.password,this.form.confirmpwd);">
     </form>
 </div>
 
