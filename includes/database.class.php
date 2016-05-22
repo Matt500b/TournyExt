@@ -1,5 +1,21 @@
 <?php
 
+/*
+
+$selData = [
+		"type" 			=> "select",
+		"columns" 		=> ["*"],
+		"table" 		=> "hist",
+		"WHERE" 		=> ['address'],
+		"AND" 			=> [],
+		"OR" 			=> [],
+		"values"		=> [3],
+		"value_types" 	=> ['i'],
+		"limit_start"	=> [],
+		"show_number" 	=> []
+		];
+$data = $db->QUERY($selData);
+ */
 class database{
     protected $link, $num_rows, $debug;   
 	protected $rs = array();
@@ -10,7 +26,126 @@ class database{
         mysqli_select_db($this->link, $db_name);
 		$this->debug = $debug;
     }
-	
+
+	/* SELECT DATA FROM DATABASE */
+	public function SELECT($sql, $args=null) {
+		unset($this->rs);
+		unset($this->err);
+		$this->rs = array();
+		$this->err = array();
+
+		$match = $this->match_sql($sql, "select");
+		if (!$match) {
+			array_push($this->err, 'You tried to use the wrong method for your query');
+		}
+		else {
+			if ($stmt = $this->link->prepare($sql)) {
+				if (isset($args)) {
+					$method = new ReflectionMethod('mysqli_stmt', 'bind_param');
+					$method->invokeArgs($stmt, $this->refValues($args));
+				}
+				if (!$stmt->execute()) {
+					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+				}
+				$result = $stmt->get_result();
+
+				if ($result) {
+					while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+						array_push($this->rs, $row);
+					}
+				} else {
+					array_push($this->rs, "No data has been returned.");
+				}
+			} else {
+				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+			}
+			$stmt->close();
+		}
+
+		if(!empty($this->err)) {
+			if($this->debug) {
+				return $this->err;
+			}
+		}
+		else {
+			return $this->rs;
+		}
+	}
+
+	/* INSERT DATA INTO THE DATABASE */
+	public function INSERT($sql, $args=null) {
+		unset($this->rs);
+		unset($this->err);
+		$this->rs = array();
+		$this->err = array();
+
+		$match = $this->match_sql($sql, "insert");
+		if (!$match) {
+			array_push($this->err, 'You tried to use the wrong method for your query');
+		}
+		else {
+			if ($stmt = $this->link->prepare($sql)) {
+				if (isset($args)) {
+					$method = new ReflectionMethod('mysqli_stmt', 'bind_param');
+					$method->invokeArgs($stmt, $this->refValues($args));
+				}
+				if (!$stmt->execute()) {
+					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+				}
+				array_push($this->rs, "Insert Successful");
+			} else {
+				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+			}
+			$stmt->close();
+		}
+
+		if(!empty($this->err)) {
+			if($this->debug) {
+				return $this->err;
+			}
+		}
+		else {
+			return $this->rs;
+		}
+	}
+
+	/* DELETE DATA FROM THE DATABASE */
+	public function DELETE($sql, $args=null) {
+		unset($this->rs);
+		unset($this->err);
+		$this->rs = array();
+		$this->err = array();
+
+		$match = $this->match_sql($sql, "delete");
+		if (!$match) {
+			array_push($this->err, 'You tried to use the wrong method for your query');
+		}
+		else {
+			if ($stmt = $this->link->prepare($sql)) {
+				if (isset($args)) {
+					$method = new ReflectionMethod('mysqli_stmt', 'bind_param');
+					$method->invokeArgs($stmt, $this->refValues($args));
+				}
+				if (!$stmt->execute()) {
+					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+				}
+				array_push($this->rs, "Delete Successful");
+			} else {
+				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+			}
+			$stmt->close();
+		}
+
+		if(!empty($this->err)) {
+			if($this->debug) {
+				return $this->err;
+			}
+		}
+		else {
+			return $this->rs;
+		}
+	}
+
 	/* CONSTRUCTOR FOR ALL QUERIES */
 	public function QUERY($data) {
 		$type = strtoupper($data['type']);
@@ -45,105 +180,24 @@ class database{
 				return 'You need to input a valid query.';
 		}
 	}
-	
-	/* SELECT DATA FROM DATABASE */
-	public function SELECT($sql, $args=null) {
-		unset($this->rs);
-		unset($this->err);
-		$this->rs = array();
-		$this->err = array();	
-		
-		if ($stmt = $this->link->prepare($sql)) {
-			if(isset($args)) {
-				$method = new ReflectionMethod('mysqli_stmt', 'bind_param'); 
-				$method->invokeArgs($stmt, $this->refValues($args));
-			}
-			if(!$stmt->execute()) {
-				array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
-			}			
-			$result = $stmt->get_result();
-			
-			if (count($result) >= 1) {
-				while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-					array_push($this->rs, $row);
-				}
-			} 
-			else {
-				array_push($this->rs, "No data has been returned.");
-			}
-		}
-		else {
-			array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
-		}
-		$stmt->close();
-		if(!empty($this->err)) {
-			if($this->debug) {
-				return $this->err;
-			}
-		}
-		else {
-			return $this->rs;
-		}
-	}	
-	
-	/* INSERT DATA INTO THE DATABASE */
-	public function INSERT($sql, $args=null) {
-		unset($this->rs);
-		unset($this->err);
-		$this->rs = array();
-		$this->err = array();
-		if ($stmt = $this->link->prepare($sql)) {
-			$method = new ReflectionMethod('mysqli_stmt', 'bind_param'); 
-			$method->invokeArgs($stmt, $this->refValues($args));
-			if(!$stmt->execute()) {
-				array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
-			}  
-			array_push($this->rs, "Insert Successful");
-		}
-		else {
-			array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
-		}
-		$stmt->close();
-		if(!empty($this->err)) {
-			if($this->debug) {
-				return $this->err;
-			}
-		}
-		else {
-			return $this->rs;
-		}
-	}
-	
-	/* DELETE DATA INTO THE DATABASE */
-	public function DELETE($sql, $args=null) {
-		if ($stmt = $this->link->prepare($sql)) {
-			$method = new ReflectionMethod('mysqli_stmt', 'bind_param'); 
-			$method->invokeArgs($stmt, $args);
-			if(!$stmt->execute()) {
-				array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
-			}  
-			array_push($this->rs, "Delete Successful");
-		}
-		else {
-			array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
-		}
-		
-		if(!empty($this->err)) {
-			if($this->debug) {
-				return $this->err;
-			}
-		}
-		else {
-			return $this->rs;
-		}
-		$stmt->close();
-	}
 
 	/* RETURNS ID OF THE LAST QUERY FROM THE INSERT QUERY */    
     public function INSERT_ID(){
      return $this->rs = mysqli_insert_id($this->link);
     }
-	
+
+	/* CHECK THE SQL QUERY BASED */
+	private function match_sql($sql, $selector) {
+		preg_match("/^(SELECT|DELETE|INSERT)/i", $sql, $type);
+
+		if(strtolower($type[0]) == strtolower($selector)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	/* BUILDS SELECT QUERY BASED ON GIVEN DATA */
 	private function build_select_query($table=null, $cols=null, $cond=null) {
 		$sql = 'SELECT ';
@@ -162,22 +216,22 @@ class database{
 		if(isset($cond) && $cond['WHERE']!== null) {
 			$sql .= ' WHERE ' . $cond['WHERE'][0] . '=?';
 			for($i=0; $i<count($cond['AND']); $i++) {
-				if($i == count($cond['AND']-1)) {
-					$sql .= ' AND ' . $cond['AND'][$i] . ' = ?';
-				}
-				else if ($i==0) {
+				if ($i==0) {
 					$sql .= ', AND ' . $cond['AND'][$i] . ' = ?';
+				}
+				else if($i == count($cond['AND']-1)) {
+					$sql .= ' AND ' . $cond['AND'][$i] . ' = ?';
 				}
 				else {
 					$sql .= ' AND ' . $cond['AND'][$i] . ' = ?,';
 				}
 			}
 			for($i=0; $i<count($cond['OR']); $i++) {
-				if($i == count($cond['OR']-1)) {
-					$sql .= ' OR ' . $cond['OR'][$i] . ' = ?';
-				}
-				else if ($i==0) {
+				if ($i==0) {
 					$sql .= ', OR ' . $cond['OR'][$i] . ' = ?';
+				}
+				else if($i == count($cond['OR']-1)) {
+					$sql .= ' OR ' . $cond['OR'][$i] . ' = ?';
 				}
 				else {
 					$sql .= ' OR ' . $cond['OR'][$i] . ' = ?,';
@@ -191,7 +245,7 @@ class database{
 	private function build_insert_query($table=null, $cols=null, $values=null) {
 		$sql = 'INSERT INTO ' . $table;
 		
-		if(isset($cols)) {
+		if(isset($cols) && $cols[0] != "*") {
 			$sql .= ' (';
 			for($i=0; $i<count($cols); $i++) {
 				if($i == count($cols)-1) {
@@ -216,6 +270,38 @@ class database{
 		}
 		$sql .= ')';
 		
+		return $sql;
+	}
+	
+	/* BUILDS DELETE QUERY BASED ON GIVEN DATA */
+	private function build_delete_query($table=null, $cond=null) {
+		$sql = 'DELETE FROM ' . $table;
+
+		if(isset($cond) && $cond['WHERE']!== null) {
+			$sql .= ' WHERE ' . $cond['WHERE'][0] . '=?';
+			for($i=0; $i<count($cond['AND']); $i++) {
+				if ($i==0) {
+					$sql .= ', AND ' . $cond['AND'][$i] . ' = ?';
+				}
+				else if($i == count($cond['AND']-1)) {
+					$sql .= ' AND ' . $cond['AND'][$i] . ' = ?';
+				}
+				else {
+					$sql .= ' AND ' . $cond['AND'][$i] . ' = ?,';
+				}
+			}
+			for($i=0; $i<count($cond['OR']); $i++) {
+				if ($i==0) {
+					$sql .= ', OR ' . $cond['OR'][$i] . ' = ?';
+				}
+				else if($i == count($cond['OR']-1)) {
+					$sql .= ' OR ' . $cond['OR'][$i] . ' = ?';
+				}
+				else {
+					$sql .= ' OR ' . $cond['OR'][$i] . ' = ?,';
+				}
+			}
+		}
 		return $sql;
 	}
 	

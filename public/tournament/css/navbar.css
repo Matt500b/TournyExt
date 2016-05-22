@@ -1,0 +1,39 @@
+#navigation-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-bottom: 1px solid rebeccapurple;
+    background: black;
+}
+
+#navigation-bar .navigation-container {
+    max-width: 1164px;
+    padding: 0 10px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#navigation-bar .navigation-container #logo {
+    height: 70px;
+    width: 85px;
+    float: left;
+    border: 1px solid white;
+}
+
+#navigation-bar .navigation-container #menu {
+    height: 70px;
+    width: 500px;
+    float: left;
+    border: 1px solid white;
+    margin-left: 20px;
+}
+
+#navigation-bar .navigation-container #user {
+    height: 70px;
+    width: 85px;
+    float: right;
+    cursor: pointer;
+    border: 1px solid white;
+}

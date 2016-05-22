@@ -1,7 +1,7 @@
-<html>
-	<body>
-
 <?php
+
+	include("headers/header.php");
+	include("headers/navbar.php");
 
 	$view = 'index';
 	if (!empty($_GET['view'])) {
@@ -16,7 +16,5 @@
 	
 	include("templates/{$view}.php");
 
-
+	include("headers/footer.php");
 ?>
-    </body>
-</html>
