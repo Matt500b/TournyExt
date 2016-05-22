@@ -48,7 +48,7 @@ class database{
 				if (!$stmt->execute()) {
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
-				array_push($this->rs, "Update Successful");
+				array_push($this->rs, 'Update Successful');
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
 			}

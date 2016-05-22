@@ -55,12 +55,12 @@ function login($email, $password) {
 
                 $now = new DateTime();
                 $_SESSION['lastActive'] = $now;
-                $db->UPDATE("UPDATE users SET lastOnline = ? WHERE email = ?", array('ss', $now, $email));
+                $db->UPDATE("UPDATE users SET lastOnline = ? WHERE email = ?", array('ss', $now->format('Y-m-d H:i:s'), $email));
                 
                 return true;
             }
             else {
-                $db->INSERT('INSERT INTO login_attemps (user_id, time) VALUES (?,?)', array('is', $loginData['id'], $now));
+                $db->INSERT('INSERT INTO login_attemps (user_id, time) VALUES (?,?)', array('is', $loginData['id'], $now->format('Y-m-d H:i:s')));
 
                 return false;
             }
