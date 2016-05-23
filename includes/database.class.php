@@ -49,10 +49,10 @@ class database{
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
 				array_push($this->rs, 'Update Successful');
+				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
 			}
-			$stmt->close();
 		}
 
 		if(!empty($this->err)) {
@@ -94,10 +94,10 @@ class database{
 				} else {
 					array_push($this->rs, "No data has been returned.");
 				}
+				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
 			}
-			$stmt->close();
 		}
 
 		if(!empty($this->err)) {
@@ -131,10 +131,11 @@ class database{
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
 				array_push($this->rs, "Insert Successful");
+				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
 			}
-			$stmt->close();
+
 		}
 
 		if(!empty($this->err)) {
@@ -168,10 +169,11 @@ class database{
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
 				array_push($this->rs, "Delete Successful");
+				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
 			}
-			$stmt->close();
+
 		}
 
 		if(!empty($this->err)) {
@@ -226,13 +228,16 @@ class database{
 
 	/* CHECK THE SQL QUERY BASED */
 	private function match_sql($sql, $selector) {
-		preg_match("/^(SELECT|DELETE|INSERT)/i", $sql, $type);
+		preg_match("/^(SELECT|DELETE|INSERT|UPDATE)/i", $sql, $type);
+		$match = (isset($type) ? $type[0] : null);
 
-		if(strtolower($type[0]) == strtolower($selector)) {
-			return true;
-		}
-		else {
-			return false;
+		if(!is_null($match)) {
+			if(strtolower($match) == strtolower($selector)) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 
