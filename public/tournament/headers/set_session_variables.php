@@ -1,5 +1,7 @@
 <?php
 
-$userID = $_SESSION['user_id'];
-$username = $_SESSION['username'];
-$lastActive = $_SESSION['lastActive'];
+if(isset($_SESSION['username'])) {
+    $userID = $_SESSION['user_id'];
+    $username = $_SESSION['username'];
+    $lastActive = $_SESSION['lastActive'];
+}

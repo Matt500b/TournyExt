@@ -6,7 +6,6 @@
 
 	echo $userID . '<br>';
 	echo $username . '<br>';
-	echo $lastActive->format('d/m/Y H:i:s') . '<br>';
 
 	include "headers/header.php";
 	include "headers/navbar.php";

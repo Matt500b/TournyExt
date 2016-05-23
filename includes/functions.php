@@ -4,7 +4,7 @@ include_once 'database.class.php';
 include_once 'session.php';
 
 /* Setting the error_reporting value depending on DEBUG value */
-if(DEBUG) { error_reporting(-1); } else { error_reporting(0);}
+if(DEBUG) { error_reporting(E_ALL & ~E_NOTICE); } else { error_reporting(0);}
 
 /* Instantiating a class */
 $db = new database(HOST, USER, PASSWORD, DATABASE, DEBUG);
