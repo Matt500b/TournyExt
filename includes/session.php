@@ -23,31 +23,31 @@ function sec_session_start() {
     session_regenerate_id(true);    // regenerated the session, delete the old one. 
 }
 
-function login($email, $password) {
-    date_default_timezone_set("Europe/London");
+function login($email, $password, $db) {
+    date_default_timezone_set(TIMEZONE);
 
-    $loginData = $db->SELECT("SELECT id, username, password, salt FROM users WHERE email = ?", array('s', $email));
+    $loginData = $db->SELECT("SELECT id, username, password, salt FROM users WHERE email = ? LIMIT 1", array('s', $email));
 
     if(!empty($loginData)) {
 
         $options = [
             'cost' => 11,
-            'salt' => $salt,
+            'salt' => $loginData[0]['salt']
         ];
 
         $typed_password = password_hash($password, PASSWORD_DEFAULT, $options);
 
-        if (check_brute($loginData['id'])) {
+        if (check_brute($loginData[0]['id'], $db)) {
             // Account is locked
             // Send an email to user saying that their account is locked
         } 
         else {
-            if ($loginData['password'] == $typed_password) {
+            if ($loginData[0]['password'] == $typed_password) {
 
-                $user_id = preg_replace("/[^0-9]+/", "", $user_id);
+                $user_id = preg_replace("/[^0-9]+/", "", $loginData[0]['id']);
                 $_SESSION['user_id'] = $user_id;
 
-                $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
+                $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $loginData[0]['username']);
                 $_SESSION['username'] = $username;
 
                 $user_browser = $_SERVER['HTTP_USER_AGENT'];
@@ -60,7 +60,7 @@ function login($email, $password) {
                 return true;
             }
             else {
-                $db->INSERT('INSERT INTO login_attemps (user_id, time) VALUES (?,?)', array('is', $loginData['id'], $now->format('Y-m-d H:i:s')));
+                $db->INSERT('INSERT INTO login_attemps (user_id, time) VALUES (?,?)', array('is', $loginData[0]['id'], $now->getTimestamp()));
 
                 return false;
             }
@@ -68,6 +68,23 @@ function login($email, $password) {
     }
     else {
         // Not data returned. User does not exist.
+        return false;
+    }
+}
+
+function check_brute($user_id, $db) {
+    date_default_timezone_set(TIMEZONE);
+    $now = new DateTime;
+
+    // All login attempts are counted from the past 2 hours. 
+    $valid_attempts = $now->getTimestamp() - (2 * 60 * 60);
+
+    $brute = $db->SELECT("SELECT time FROM login_attemps WHERE user_id = ? AND time > ?", array('ii', $user_id, $valid_attempts));
+
+    if(count($brute) > 5) {
+        return true;
+    }
+    else {
         return false;
     }
 }
