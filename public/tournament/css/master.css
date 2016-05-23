@@ -1,6 +1,10 @@
 @import url("navbar.css");
 @import url("formStyle.css");
 
+body{
+    font-family: sans-serif;
+}
+
 .clearfix {
     clear: both;
 }
