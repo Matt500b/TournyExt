@@ -12,7 +12,7 @@ include_once '../../includes/register.inc.php';
 
     <h1>Simple Registering Form</h1>
 
-    <form action="" method="POST" class="reg_form" name="Registration_form">
+    <form action="" method="POST" class="reg_form" name="registration_form">
       <label for="username">Username</label>
       <input type="text" name="username" id="username" value="">
       <label for="email">Email</label>

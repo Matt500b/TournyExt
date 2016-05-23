@@ -19,13 +19,13 @@ if(isset($_POST['username'], $_POST['email'], $_POST['p'])) {
         $err_msg .= 'Something went wrong on the server. Please contact an administrator.';
     }
 
-    $emailCheck = $db->SELECT('SELECT id FROM users WHERE email = ?', array('s', $email));
+    $emailCheck = $db->SELECT('SELECT id FROM users WHERE email = ? LIMIT 1', array('s', $email));
 
     if(!empty($emailCheck)) {
         $err_msg .= 'A user with this email address already exists.';
     }
     else {
-        $usernameCheck = $db->SELECT('SELECT id FROM users WHERE username = ?', array('s', $username));
+        $usernameCheck = $db->SELECT('SELECT id FROM users WHERE username = ? LIMIT 1', array('s', $username));
 
         if(!empty($usernameCheck)) {
             $err_msg .= 'A user with this username already exists.';

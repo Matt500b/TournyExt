@@ -1,9 +1,12 @@
 <?php
 	include '../../includes/functions.php';
 
-	//sec_session_start();
-	$loggedIn = (isset($_SESSION['id']) ? true : false);
-	//$userID = $_SESSION['id'];
+	sec_session_start();
+	include 'headers/set_session_variables.php';
+
+	echo $userID . '<br>';
+	echo $username . '<br>';
+	echo $lastActive->format('d/m/Y H:i:s') . '<br>';
 
 	include "headers/header.php";
 	include "headers/navbar.php";
