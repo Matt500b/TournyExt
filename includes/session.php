@@ -25,6 +25,7 @@ function sec_session_start() {
 
 function login($email, $password, $db) {
     date_default_timezone_set(TIMEZONE);
+    $now = new DateTime();
 
     $loginData = $db->SELECT("SELECT id, username, password, salt FROM users WHERE email = ? LIMIT 1", array('s', $email));
 
@@ -38,6 +39,7 @@ function login($email, $password, $db) {
         $typed_password = password_hash($password, PASSWORD_DEFAULT, $options);
 
         if (check_brute($loginData[0]['id'], $db)) {
+            return false;
             // Account is locked
             // Send an email to user saying that their account is locked
         } 
@@ -53,14 +55,13 @@ function login($email, $password, $db) {
                 $user_browser = $_SERVER['HTTP_USER_AGENT'];
                 $_SESSION['login_string'] = password_hash($password . $user_browser, PASSWORD_DEFAULT, $options);
 
-                $now = new DateTime();
                 $_SESSION['lastActive'] = $now;
                 $db->UPDATE("UPDATE users SET lastOnline = ? WHERE email = ?", array('ss', $now->format('Y-m-d H:i:s'), $email));
                 
                 return true;
             }
             else {
-                $db->INSERT('INSERT INTO login_attemps (user_id, time) VALUES (?,?)', array('is', $loginData[0]['id'], $now->getTimestamp()));
+                $db->INSERT('INSERT INTO login_attempts (`user_id`, `time`) VALUES (?,?)', array('ii', $loginData[0]['id'], $now->getTimestamp()));
 
                 return false;
             }

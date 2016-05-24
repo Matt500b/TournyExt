@@ -10,7 +10,10 @@ include "headers/navbar.php";
 
     <?php
     if (!empty($err_msg)) {
-        echo '<div class="error">' . $err_msg . '</div>';
+        echo '<div class="error_msg">' . $err_msg . '</div>';
+    }
+    else if (!empty($success_msg)) {
+        echo '<div class="success_msg">' . $success_msg . '</div>';
     }
     ?>
 
@@ -24,7 +27,7 @@ include "headers/navbar.php";
         <input type="button" value="Login" onclick="formhash(this.form, this.form.password);">
     </form>
 
-    <p>If you don't have a login, please <a href='templates/register.php'>register</a></p>
+    <p>If you don't have a login, please <a href='register.php'>register</a></p>
     <p><a href='#'>Forgot password? (Not implemented yet)</a></p>
 </div>
 

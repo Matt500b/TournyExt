@@ -3,10 +3,11 @@
 include_once 'functions.php';
 
 $err_msg = "";
+$success_msg = "";
 $default_permission = 1;
 
 if(isset($_POST['username'], $_POST['email'], $_POST['p'])) {
-    date_default_timezone_set("Europe/London");
+    date_default_timezone_set(TIMEZONE);
 
     $username = strip_tags(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
     $email = strip_tags(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
@@ -43,12 +44,15 @@ if(isset($_POST['username'], $_POST['email'], $_POST['p'])) {
 
             $now = new DateTime();
 
-            $insert = $db->INSERT('INSERT INTO users (username, email, password, salt, created_at, permissions) VALUES (?,?,?,?,?,?)', array('sssssi', $username, $email, $password, $random_salt, $now->format('Y-m-d H:i:s'), $default_permission));
+            $maxID = $db->SELECT('SELECT MAX(id) AS maxid FROM users');
+            $insID = intval($maxID[0]['maxid']) + 1;
+
+            $insert = $db->INSERT('INSERT INTO users (id, username, email, password, salt, created_at, permissions) VALUES (?,?,?,?,?,?,?)', array('isssssi', $insID, $username, $email, $password, $random_salt, $now->format('Y-m-d H:i:s'), $default_permission));
+            $insert2 = $db->INSERT('INSERT INTO users_info (user_id) VALUES (?)', array('i', $insID));
 
             if($insert[0] == "Insert Successful") {
-                $username = "";
-                $email = "";
-                $password = "";
+                $success_msg .= "Registration Successful. Redirecting to the home page shortly.";
+                header('Refresh: 2; URL=index.php');
             }
         }
     }

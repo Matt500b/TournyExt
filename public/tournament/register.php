@@ -1,12 +1,19 @@
 <?php
 include_once '../../includes/register.inc.php';
+sec_session_start();
+
+include "headers/header.php";
+include "headers/navbar.php";
 ?>
 
 <div class="wrapper">
 
     <?php
         if (!empty($err_msg)) {
-            echo '<div class="error">' . $err_msg . '</div>';
+            echo '<div class="error_msg">' . $err_msg . '</div>';
+        }
+        else if (!empty($success_msg)) {
+            echo '<div class="success_msg">' . $success_msg . '</div>';
         }
     ?>
 
@@ -25,3 +32,6 @@ include_once '../../includes/register.inc.php';
     </form>
 </div>
 
+<?php
+include "headers/footer.php";
+?>
