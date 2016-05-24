@@ -4,9 +4,6 @@
 	sec_session_start();
 	include 'headers/set_session_variables.php';
 
-	echo $userID . '<br>';
-	echo $username . '<br>';
-
 	include "headers/header.php";
 	include "headers/navbar.php";
 

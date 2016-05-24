@@ -7,3 +7,8 @@
 
 echo '<a href="/tournament/index.php">Proceed to application...</a>';
 
+include_once '../includes/functions.php';
+
+$maxID = $db->SELECT('SELECT MAX(id) AS maxid FROM users');
+$insID = intval($maxID[0]['maxid']) + 1;
+echo $insID;
