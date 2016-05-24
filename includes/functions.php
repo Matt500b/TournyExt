@@ -1,6 +1,7 @@
 <?php
 include_once 'settings.php';
 include_once 'database.class.php';
+include_once 'user_profile.class.php';
 include_once 'session.php';
 
 /* Setting the error_reporting value depending on DEBUG value */
