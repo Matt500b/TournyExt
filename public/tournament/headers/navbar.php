@@ -33,7 +33,7 @@
                                     </div>';
                             }
                             else {
-                                echo '<a href="login.php">Login</a><br><a href="register.php">Register</a>';
+                                echo '<a class="btn login" href="login.php">Login</a><br><a class="btn register" href="register.php">Register</a>';
                             }
                         ?>
                     </div>
