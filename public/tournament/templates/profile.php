@@ -1,8 +1,12 @@
 <?php
- // Profile Stuff
-?>
+$pid = $_GET['pid'];
 
-<div class="wrapper">
-    
-</div>
+echo '<div class="wrapper">';
+    if(isset($pid)) {
+        echo 'Currently viewing user '. $pid;
+    }
+    else {
+        echo 'No user selected. How to handle this :)?';
+    }
+echo '</div>';
 
