@@ -30,17 +30,23 @@ class user_profile {
     public function overview() {
         $string = $this->fname . ' <br>' . $this->lname . ' <br>' . $this->location . ' <br>' . $this->age . ' <br>' . $this->headerImg . ' <br>' . $this->profileImg;
 
+        $string .= '<div style="border: 1px solid green">Testing for the overview Div</div>';
+
         return $string;
     }
 
     public function teams() {
         $string = "This will have the layout for the teams section";
 
+        $string .= '<div style="border: 1px solid red">Testing for the Teams Div</div>';
+
         return $string;
     }
 
     public function gameHistory() {
         $string = "This will have the layout for the history section";
+
+        $string .= '<div style="border: 1px solid blue">Testing for the history Div</div>';
 
         return $string;
     }
