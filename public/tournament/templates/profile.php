@@ -6,8 +6,11 @@ $profilePage = $_GET['page'];
 echo '<div class="wrapper">';
     if(isset($pid)) {
 
-        $profileData = $db->SELECT('SELECT users_info.*, users.username, users.lastOnline FROM users_info INNER JOIN users ON users.id = users_info.user_id WHERE users.username = ?', array('s', $pid));
-        $pclass = new user_profile($profileData);
+        //$profileData = $db->SELECT('SELECT users_info.*, users.username, users.lastOnline FROM users_info INNER JOIN users ON users.id = users_info.user_id WHERE users.username = ?', array('s', $pid));
+        //$pclass = new user_profile($profileData);
+
+        $pclass = new user_profile($db, $pid);
+        var_dump($pclass);
 
         echo '
         <div class="profile-header">' . $pclass->headerImg . '</div>
