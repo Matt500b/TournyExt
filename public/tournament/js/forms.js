@@ -132,3 +132,31 @@ function regformhashreset(form, password, conf, e, q) {
     form.submit();
     return true;
 }
+
+function createTeamHash(form, name, abbname, password) {
+    // Check each field has a value
+    if (name.value == ''         ||
+        abbname.value == '') {
+
+        alert('You must provide all the requested details. Please try again');
+        return false;
+    }
+
+    if(password.value != '') {
+        // Create a new element input, this will be our hashed password field.
+        var p = document.createElement("input");
+
+        // Add the new element to our form.
+        form.appendChild(p);
+        p.name = "p";
+        p.type = "hidden";
+        p.value = hex_sha512(password.value);
+
+        // Make sure the plaintext password doesn't get sent.
+        password.value = "";
+    }
+
+    // Finally submit the form. 
+    form.submit();
+    return true;
+}

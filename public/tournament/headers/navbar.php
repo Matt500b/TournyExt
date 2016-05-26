@@ -20,7 +20,7 @@
                                             <li><a href="#profile">Admin pages here.</a></li>
                                             <li class="dd-line"></li>
                                             <!--<li><a href="#profile">+ New Tournament</a></li>-->
-                                            <li><a href="#profile">+ Create a Team</a></li>
+                                            <li><a href="?view=teams&action=create">+ Create a Team</a></li>
                                             <li class="dd-line"></li>
                                             <li><a href="?view=profile&pid=' . $username . '">Your profile</a></li>
                                             <!--<li><a href="#profile">Settings</a></li>
