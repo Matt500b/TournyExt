@@ -1,15 +1,15 @@
-    <body>
-            <div id="navigation-bar">
-                <div class="navigation-container clearfix">
+<body>
+<div id="navigation-bar">
+    <div class="navigation-container clearfix">
 
-                    <div id="logo"></div>
-                    <div id="menu">
-                        <a href="./">HOME</a>
-                    </div>
-                    <div id="user">
-                        <?php
-                            if($loggedIn) {
-                                echo '
+        <div id="logo"></div>
+        <div id="menu">
+            <a href="./">HOME</a>
+        </div>
+        <div id="user">
+            <?php
+            if($loggedIn) {
+                echo '
                                     <div class="simple-dd-menu">
                                         ' . $username . '
                                         <img src="https://avatars2.githubusercontent.com/u/17126397?v=3&s=460" alt="" />
@@ -31,11 +31,11 @@
                                             <li><a href="logout.php">Sign out</a></li>
                                         </ul>
                                     </div>';
-                            }
-                            else {
-                                echo '<a class="btn login" href="login.php">Login</a><br><a class="btn register" href="register.php">Register</a>';
-                            }
-                        ?>
-                    </div>
-                </div>
-            </div>
+            }
+            else {
+                echo '<a class="btn login" href="login.php">Login</a><br><a class="btn register" href="register.php">Register</a>';
+            }
+            ?>
+        </div>
+    </div>
+</div>

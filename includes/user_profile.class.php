@@ -28,9 +28,36 @@ class user_profile {
     }
 
     public function overview() {
-        $string = $this->fname . ' <br>' . $this->lname . ' <br>' . $this->location . ' <br>' . $this->age . ' <br>' . $this->headerImg . ' <br>' . $this->profileImg;
+        $string = '
+        <h4>Recently Played games</h4>
+        <div class="game-list">
+          <div class="game-cover">
+            <div class="game-cov-img">
+              <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
+            </div>
+            <div class="game-cov-title">CS:GO</div>
+          </div>
+                  <div class="game-cover">
+            <div class="game-cov-img">
+              <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
+            </div>
+            <div class="game-cov-title">CS:GO</div>
+          </div>
+          <div class="game-cover">
+            <div class="game-cov-img">
+              <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
+            </div>
+            <div class="game-cov-title">COD BO3</div>
+          </div>
+                  <div class="game-cover">
+            <div class="game-cov-img">
+              <a href="#"><img src="http://static.giantbomb.com/uploads/original/1/13692/2302957-i2cs9uzmq4yua.jpg" alt="" /></a>
+            </div>
+            <div class="game-cov-title">CS:GO</div>
+          </div>
+        </div>
 
-        $string .= '<div style="border: 1px solid green">Testing for the overview Div</div>';
+        ';// end of string
 
         return $string;
     }
