@@ -1,5 +1,24 @@
 .create_team {
+    width: 500px;
     margin: 0 auto;
-    text-align:center;
-    max-width: 350px;
+}
+.create_team_form{
+    width: 100%;
+}
+.create_team_form label{
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+.create_team_form span{
+    color: #888;
+}
+form.reg_form.create_team_form input {
+    margin-bottom: 0;
+}
+form.reg_form.create_team_form textarea{
+    width: 100%;
+    resize: vertical;
+    max-height: 100px;
 }
