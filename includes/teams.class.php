@@ -2,13 +2,14 @@
 
 class teams {
     private $db;
+    private $password;
+    private  $salt;
+
     public $name;
     public $abv;
     public $website;
     public $logo;
 
-    private $password;
-    private  $salt;
 
     public function create_team_form() {
         $string = '
@@ -39,11 +40,22 @@ class teams {
         return $string;
     }
 
-    public function linkDB(\database $link) {
-        $this->db = $link;
+    public function display_team(\database $db, $tid) {
+        $this->db = $db;
+        $teamData = $this->db->SELECT("SELECT * FROM teams WHERE name = ?", array("i", $tid));
+        $this->name = $teamData[0]['name'];
+        $this->abv = $teamData[0]['abv'];
+
+        $string = '
+            <div>' . $this->name . '</div>
+            <div>' . $this->abv . '</div>
+        ';
+
+        return $string;
     }
 
-    public function create_team($name="", $abv="", $password="", $website="", $logo="") {
+    public function create_team(\database $db, $name="", $abv="", $password="", $website="", $logo="") {
+        $this->db = $db;
         $this->name = (isset($name) ? $name : "");
         $this->abv = (isset($abv) ? $abv : "");
         $this->website = (isset($website) ? $website : "");
