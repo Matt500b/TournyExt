@@ -8,12 +8,7 @@ include_once '../../includes/form_actions.php';
 
 echo '<div class="wrapper">';
 
-    if (!empty($err_msg)) {
-        echo '<div class="error_msg">' . $err_msg . '</div>';
-    }
-    else if (!empty($success_msg)) {
-        echo '<div class="success_msg">' . $success_msg . '</div>';
-    }
+    echo $return_msg;
 
     switch($action) {
         case 'create':
@@ -22,7 +17,7 @@ echo '<div class="wrapper">';
             break;
         case 'display':
             $team = new teams();
-            echo $team->display_team($db, $tid);
+            var_dump($team->display_team($db, $tid));
             break;
         default:
             echo "stuff";

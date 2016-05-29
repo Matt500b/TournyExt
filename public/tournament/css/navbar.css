@@ -4,7 +4,8 @@
     left: 0;
     right: 0;
     z-index: 100;
-    border-bottom: 1px solid rebeccapurple;
+    border-bottom: 1px solid #ccc;
+    background-color: #f1f1f1;
 }
 
 #navigation-bar .navigation-container {
@@ -73,6 +74,7 @@
     cursor:pointer;
     min-width: 110px;
     padding: 0 8px;
+    margin-top: 20px;
 }
 .simple-dd-menu img{
     vertical-align: middle;

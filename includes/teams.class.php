@@ -10,6 +10,7 @@ class teams {
     public $website;
     public $logo;
 
+    public $err_msg;
 
     public function create_team_form() {
         $string = '
@@ -41,8 +42,14 @@ class teams {
     }
 
     public function display_team(\database $db, $tid) {
+        date_default_timezone_set(TIMEZONE);
         $this->db = $db;
         $teamData = $this->db->SELECT("SELECT * FROM teams WHERE name = ?", array("i", $tid));
+        $teamMembers = $this->db->SELECT("SELECT t1.*, t2.username, t3.*, t4.role FROM teams_players AS t1 
+                                        INNER JOIN users AS t2 ON t1.player_id = t2.id
+                                        INNER JOIN users_info AS t3 ON t2.id = t3.user_id
+                                        INNER JOIN teams_roles AS t4 ON t1.role_id = t4.role_id 
+                                        WHERE t1.team_id = ?", array('i', $tid));
         $this->name = $teamData[0]['name'];
         $this->abv = $teamData[0]['abv'];
 
@@ -51,41 +58,52 @@ class teams {
             <div>' . $this->abv . '</div>
         ';
 
-        return $string;
+        return $teamMembers;
     }
 
-    public function create_team(\database $db, $name="", $abv="", $password="", $website="", $logo="") {
+    public function create_team(\database $db, $name="", $abv="", $password="", $website="", $logo="", $uid=null) {
+        date_default_timezone_set(TIMEZONE);
+        $creation_role = 2;
         $this->db = $db;
         $this->name = (isset($name) ? $name : "");
         $this->abv = (isset($abv) ? $abv : "");
         $this->website = (isset($website) ? $website : "");
         $this->logo = (isset($logo) ? $logo : "");
 
-        if(isset($password)) {
-            $this->salt = mcrypt_create_iv(24, MCRYPT_DEV_URANDOM);
+        //$inTeamsCheck = $this->db->SELECT('SELECT `name` FROM teams WHERE `name` = ? LIMIT 1', array('s', $this->name));
 
-            $options = [
-                'cost' => 11,
-                'salt' => $this->salt,
-            ];
-
-            $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
+        $nameCheck = $this->db->SELECT('SELECT `name` FROM teams WHERE `name` = ? LIMIT 1', array('s', $this->name));
+        if(!empty($nameCheck)) {
+            $err_msg = '<div class="error_msg">A team with this name already exists.</div>';
+            return $err_msg;
         }
         else {
-            $this->password = "";
-            $this->salt = "";
-        }
+            if(isset($password)) {
+                $this->salt = mcrypt_create_iv(24, MCRYPT_DEV_URANDOM);
 
-        $now = new DateTime();
+                $options = [
+                    'cost' => 11,
+                    'salt' => $this->salt,
+                ];
 
-        $maxID = $this->db->SELECT('SELECT MAX(id) AS maxid FROM teams');
-        $insID = intval($maxID[0]['maxid']) + 1;
+                $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
+            }
+            else {
+                $this->password = "";
+                $this->salt = "";
+            }
 
-        $insert = $this->$db->INSERT('INSERT INTO teams (`id`, `name`, `abv`, `teamimg`, `create_at`, `join_password`, `salt`) VALUES (?, ?, ?, ?, ?, ?, ?)', array('issssss', $insID, $this->name, $this->abv, $this->logo, $now->format('Y-m-d H:i:s'), $this->password, $this->salt));
+            $now = new DateTime();
 
-        if($insert[0] == "Insert Successful") {
-            $success_msg .= "Team Creation Successful. Redirecting to the home page shortly.";
-            return $success_msg;
+            $maxID = $this->db->SELECT('SELECT MAX(id) AS maxid FROM teams');
+            $insID = intval($maxID[0]['maxid']) + 1;
+
+            $insert = $this->db->INSERT('INSERT INTO teams (`id`, `name`, `abv`, `teamImg`, `created_at`, `join_password`, `salt`) VALUES (?, ?, ?, ?, ?, ?, ?)', array('issssss', $insID, $this->name, $this->abv, $this->logo, $now->format('Y-m-d H:i:s'), $this->password, $this->salt));
+            $insert2 = $this->db->INSERT('INSERT INTO teams_players (`team_id`, `player_id`, `role_id`) VALUES (?, ?, ?)', array('iii', $insID, $uid, $creation_role));
+            if($insert[0] == "Insert Successful" && $insert2[0] == "Insert Successful") {
+                $success_msg .= '<div class="success_msg">Team Creation Successful.</div>';
+                return $success_msg;
+            }
         }
     }
 }
