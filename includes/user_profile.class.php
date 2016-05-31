@@ -56,18 +56,18 @@ class edit_user_profile {
             move_uploaded_file($this->profileImg['tmp_name'], $this->path . $profile);
         }
         else {
-            $header = $this->profileImgOld;
+            $profile = $this->profileImgOld;
         }
 
         if($this->headerImg['name'] != "") {
             $extHeader = pathinfo($this->headerImg['name'])['extension'];
             $random2 = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
             $header = $random2 . ".$extHeader";
-            if (file_exists($this->path . $this->headerImgOld) && !empty($this->headerImgOld) && $this->headerImgOld != "default_profile_header_img.png")
+            if (file_exists($this->path . $this->headerImgOld) && !empty($this->headerImgOld) && $this->headerImgOld != "default_profile_header_img.jpg")
             {
                 unlink($this->path . $this->headerImgOld);
             }
-            move_uploaded_file($this->profileImg['tmp_name'], $this->path . $header);
+            move_uploaded_file($this->headerImg['tmp_name'], $this->path . $header);
         }
         else {
             $header = $this->headerImgOld;
