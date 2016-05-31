@@ -3,19 +3,31 @@ $pid = $_GET['pid'];
 $profilePage = $_GET['page'];
 $edit = $_GET['edit'];
 
+include_once '../../includes/form_actions.php';
+
 $pclass = new user_profile($db, $pid, $username);
 
 echo '<div class="wrapper">';
+
+
+//
+// Display edit profile
+//
 if(isset($edit) && $edit && isset($pid)) {
     if($pclass->myProfile()) {
+
+        echo $return_msg;
         echo $pclass->editProfile();
     }
     else {
         echo 'You are not authorized to edit this profile';
     }
 }
-else if(isset($pid)) {
 
+//
+// Display profile
+//
+else if(isset($pid)) {
     if (!empty($pclass->empty_msg)) {
         echo $pclass->empty_msg;
     } else {
@@ -56,6 +68,10 @@ else if(isset($pid)) {
         <div class="profile-information"></div>';
     }
 }
+
+//
+// pid not set in url
+//
 else {
     echo 'No user selected. How to handle this :)?';
 }
