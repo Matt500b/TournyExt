@@ -8,14 +8,7 @@ include "headers/navbar.php";
 
 <div class="wrapper">
 
-    <?php
-        if (!empty($err_msg)) {
-            echo '<div class="error_msg">' . $err_msg . '</div>';
-        }
-        else if (!empty($success_msg)) {
-            echo '<div class="success_msg">' . $success_msg . '</div>';
-        }
-    ?>
+    <?php echo $return_msg['message']; ?>
 
     <h1>Simple Registering Form</h1>
 

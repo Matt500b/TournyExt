@@ -5,6 +5,8 @@
         <div id="logo"></div>
         <div id="menu">
             <a href="./">HOME</a>
+            <a href="?view=cups">CUPS</a>
+            <a href="?view=ladder">LADDER</a>
         </div>
         <div id="user">
             <?php
@@ -17,15 +19,13 @@
                                         <ul>
                                             <li class="log_status">Online for <b>3m</b></li>
                                             <li class="dd-line"></li>
-                                            <li><a href="#profile">Admin pages here.</a></li>
+                                            <li><a href="#">Admin Control Panel</a></li>
+                                            <li><a href="#">Moderator Control Panel</a></li>
                                             <li class="dd-line"></li>
-                                            <!--<li><a href="#profile">+ New Tournament</a></li>-->
                                             <li><a href="?view=teams&action=create">+ Create a Team</a></li>
                                             <li class="dd-line"></li>
-                                            <li><a href="?view=profile&pid=' . $username . '">Your profile</a></li>
-                                            <!--<li><a href="#profile">Settings</a></li>
-                                            <li><a href="#profile">Activity log</a></li>
-                                            <li><a href="#profile">Help</a></li>-->
+                                            <li><a href="?view=profile&pid=' . $username . '">Profile</a></li>
+                                            <li><a href="#">Teams</a></li>
                                             <li><a href="#profile">Report a problem</a></li>
                                             <li class="dd-line"></li>
                                             <li><a href="logout.php">Sign out</a></li>

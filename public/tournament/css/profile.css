@@ -25,16 +25,16 @@
   display:block;
 }
 .pro-head .pro-img{
-    bottom: 3%;
-        right: 4%;
-        position: absolute;
-        background: black;
-        height: 150px;
-        width: 150px;
-        overflow: hidden;
-        z-index: 2;
-        box-shadow: 0 2px 0 rgba(0,0,0,0.15);
-        border-radius: 5px;
+  bottom: 3%;
+  right: 4%;
+  position: absolute;
+  background: rgba(0,0,0,0.2);
+  height: 150px;
+  width: 150px;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+  border-radius: 5px;
 }
 .pro-head .pro-img img{
   width: 100%;
@@ -136,14 +136,14 @@
 
 /* right column css below*/
 .edit-pro-but{
-    display:block;
-    padding: 9px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    background-color: #f1f1f1;
+  display:block;
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #f1f1f1;
 }
 .edit-pro-but:hover{
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 .info-title{
   background-color: #1A84FF;
@@ -233,4 +233,80 @@ ul.social-list span{
   border-radius: 0 0 5px 5px;
   padding: 5px;
   font-weight: bold;
+}
+
+/* TEAMS TAB BELOW */
+.t_holder{
+  width: 100%;
+  display: flex;
+  justify-content:center;
+}
+.t_box{
+  width: 110px;
+  padding: 10px;
+  margin: 8px;
+}
+.t_box a{
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+}
+.t_box a:hover{
+  color: #1A84FF;
+  opacity: 0.9;
+  text-decoration: none;
+}
+.t_box img{
+  width: 100%;
+  border-radius: 50px;
+}
+.t_box span.t_name{
+  font-size: 16px;
+  display:block;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+
+
+/* configuration for UPDATING IMAGES for profile*/
+
+.preview_pro{
+  position: relative;
+  width: 100%;
+  max-width: 750px;
+  background-color: #eee;
+  height: 300px;
+  border: 1px solid #ccc;
+  border-radius:5px;
+  overflow:hidden;
+  margin: 10px 0;
+}
+
+.proImgInput,
+.proImgInputTwo{
+  position: absolute;
+  bottom:0;
+  left:0;
+
+}
+
+
+#targetImgInput{
+  position:absolute;
+  width: 150px;
+  height: 150px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+  background-color:#e9e9e9;
+  border-radius: 5px;
+  display: block;
+  bottom: 3%;
+  right: 4%;
+}
+#targetImgInputTwo{
+  max-width: 750px;
+  margin: 0 auto;
+  position: absolute;
+  top:0;
+  left: 2.5%;
 }

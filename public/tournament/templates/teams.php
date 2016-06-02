@@ -12,12 +12,12 @@ echo '<div class="wrapper">';
 
     switch($action) {
         case 'create':
-            $team = new teams();
+            $team = new teams($db);
             echo $team->create_team_form();
             break;
         case 'display':
-            $team = new teams();
-            var_dump($team->display_team($db, $tid));
+            $team = new teams($db);
+            var_dump($team->display_team($tid));
             break;
         default:
             echo "stuff";

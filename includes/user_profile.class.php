@@ -14,7 +14,6 @@ class edit_user_profile {
     public $profileImgOld;
     public $headerImg;
     public $profileImg;
-
     public $facebook;
     public $twitter;
     public $youtube;
@@ -22,33 +21,34 @@ class edit_user_profile {
     public $website;
 
     public function __construct(\database $db, $fname, $lname, $location, $age, $facebook, $twitter, $youtube, $instagram, $website, $profileImgOld, $headerImgOld, $profileImg, $headerImg, $viewer) {
-        $this->db = $db;
-        $this->viewer = $viewer;
+        $this->db               = $db;
+        $this->viewer           = $viewer;
 
-        $this->fname = (!empty($fname) ? $fname : null);
-        $this->lname = (!empty($lname) ? $lname : null);
-        $this->location = (!empty($location) ? $location : null);
-        $this->age = (!empty($age) ? $age : null);
+        $this->fname            = (!empty($fname)           ? $fname            : null);
+        $this->lname            = (!empty($lname)           ? $lname            : null);
+        $this->location         = (!empty($location)        ? $location         : null);
+        $this->age              = (!empty($age)             ? $age              : null);
 
-        $this->headerImgOld = (!empty($headerImgOld) ? $headerImgOld : 'default_profile_header_img.jpg');
-        $this->headerImg = (!empty($headerImg) ? $headerImg : '');
+        $this->headerImgOld     = (!empty($headerImgOld)    ? $headerImgOld     : 'default_profile_header_img.jpg');
+        $this->headerImg        = (!empty($headerImg)       ? $headerImg        : '');
 
-        $this->profileImgOld = (!empty($profileImgOld) ? $profileImgOld : 'default_profile_img.png');
-        $this->profileImg= (!empty($profileImg) ? $profileImg : '');
+        $this->profileImgOld    = (!empty($profileImgOld)   ? $profileImgOld    : 'default_profile_img.png');
+        $this->profileImg       = (!empty($profileImg)      ? $profileImg       : '');
 
-        $this->facebook = (!empty($facebook) ? $facebook : null);
-        $this->twitter = (!empty($twitter) ? $twitter : null);
-        $this->youtube = (!empty($youtube) ? $youtube : null);
-        $this->instagram = (!empty($instagram) ? $instagram : null);
-        $this->website = (!empty($website) ? $website : null);
+        $this->facebook         = (!empty($facebook)        ? $facebook         : null);
+        $this->twitter          = (!empty($twitter)         ? $twitter          : null);
+        $this->youtube          = (!empty($youtube)         ? $youtube          : null);
+        $this->instagram        = (!empty($instagram)       ? $instagram        : null);
+        $this->website          = (!empty($website)         ? $website          : null);
     }
 
     public function update_profile() {
 
         if($this->profileImg['name'] != "") {
             $extProfile = pathinfo($this->profileImg['name'])['extension'];
-            $random1 = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
-            $profile = $random1 . ".$extProfile";
+            $random1    = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
+            $profile    = $random1 . ".$extProfile";
+
             if (file_exists($this->path . $this->profileImgOld) && !empty($this->profileImgOld) && $this->profileImgOld != "default_profile_img.png")
             {
                 unlink($this->path . $this->profileImgOld);
@@ -60,9 +60,10 @@ class edit_user_profile {
         }
 
         if($this->headerImg['name'] != "") {
-            $extHeader = pathinfo($this->headerImg['name'])['extension'];
-            $random2 = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
-            $header = $random2 . ".$extHeader";
+            $extHeader  = pathinfo($this->headerImg['name'])['extension'];
+            $random2    = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 15);
+            $header     = $random2 . ".$extHeader";
+
             if (file_exists($this->path . $this->headerImgOld) && !empty($this->headerImgOld) && $this->headerImgOld != "default_profile_header_img.jpg")
             {
                 unlink($this->path . $this->headerImgOld);
@@ -73,20 +74,13 @@ class edit_user_profile {
             $header = $this->headerImgOld;
         }
 
-        $update = $this->db->UPDATE("UPDATE `users_info` SET `fname`=?, `lname`=?, `location`=?, `age`=?, `headerImg`=?, `profileImg`=?, `facebook`=?, `twitter`=?, `youtube`=?, `instagram`=?, `website`=? WHERE `user_id` = ?"
-                                    ,array('sssssssssssi',$this->fname, $this->lname, $this->location, $this->age, $header, $profile, $this->facebook, $this->twitter,
+        $update = $this->db->UPDATE("UPDATE `users_info` 
+                                    SET `fname`=?, `lname`=?, `location`=?, `age`=?, `headerImg`=?, `profileImg`=?, `facebook`=?, `twitter`=?, `youtube`=?, `instagram`=?, `website`=? 
+                                    WHERE `user_id` = ?",
+                                    array('sssssssssssi',$this->fname, $this->lname, $this->location, $this->age, $header, $profile, $this->facebook, $this->twitter,
                                     $this->youtube, $this->instagram, $this->website, $this->viewer));
-        
 
-
-        if($update[0] == "Update Successful") {
-            $success_msg .= '<div class="success_msg">' . $update[0] . '</div>';
-            return $success_msg;
-        }
-        else {
-            $success_msg .= '<div class="error_msg">' . $update[0] . '</div>';
-            return $success_msg;
-        }
+        return $update[0]['message'];
     }
 }
 
@@ -99,9 +93,13 @@ class user_profile {
 
     private $db;
     private $viewer;
+    private $viewerid;
+    private $response;
 
-    public $imgLoc = "images/profile/";
+    public $profileImgLoc = "images/profile/";
+    public $teamsImgLoc = "images/teams/";
     public $username;
+    public $userID;
     public $fname;
     public $lname;
     public $location;
@@ -117,30 +115,37 @@ class user_profile {
 
     public $empty_msg;
 
-    public function __construct(\database $db, $pid, $viewer) {
-        $this->db = $db;
-        $this->username = $pid;
-        $this->viewer = $viewer;
+    public function __construct(\database $db, $pid, $viewer, $viewerid) {
+        $this->db               = $db;
+        $this->username         = $pid;
+        $this->viewer           = $viewer;
+        $this->viewerid         = $viewerid;
 
-        $params = $this->db->SELECT("SELECT users_info.*, users.username, users.lastOnline FROM users_info INNER JOIN users ON users.id = users_info.user_id WHERE users.username = ?", array('s', $this->username));
+        $params = $this->db->SELECT("SELECT users_info.*, users.username, users.id, users.lastOnline 
+                                    FROM users_info 
+                                    INNER JOIN users 
+                                    ON users.id = users_info.user_id 
+                                    WHERE users.username = ?",
+                                    array('s', $this->username));
 
         if(empty($params)) {
-            $this->empty_msg = 'The user you are attempting to view does not exist.';
+            $this->empty_msg    = 'The user you are attempting to view does not exist.';
         }
         else {
-            $this->fname = (!empty($params[0]['fname']) ? $params[0]['fname'] : null);
-            $this->lname = (!empty($params[0]['lname']) ? $params[0]['lname'] : null);
-            $this->location = (!empty($params[0]['location']) ? $params[0]['location'] : null);
-            $this->age = (!empty($params[0]['age']) ? $params[0]['age'] : null);
+            $this->userID       = (!empty($params[0]['id'])             ? $params[0]['id']          : null);
+            $this->fname        = (!empty($params[0]['fname'])          ? $params[0]['fname']       : null);
+            $this->lname        = (!empty($params[0]['lname'])          ? $params[0]['lname']       : null);
+            $this->location     = (!empty($params[0]['location'])       ? $params[0]['location']    : null);
+            $this->age          = (!empty($params[0]['age'])            ? $params[0]['age']         : null);
 
-            $this->headerImg = (!empty($params[0]['headerImg']) ? $params[0]['headerImg'] : 'default_profile_header_img.jpg');
-            $this->profileImg = (!empty($params[0]['profileImg']) ? $params[0]['profileImg'] : 'default_profile_img.png');
+            $this->headerImg    = (!empty($params[0]['headerImg'])      ? $params[0]['headerImg']   : 'default_profile_header_img.jpg');
+            $this->profileImg   = (!empty($params[0]['profileImg'])     ? $params[0]['profileImg']  : 'default_profile_img.png');
 
-            $this->facebook = (!empty($params[0]['facebook']) ? $params[0]['facebook'] : null);
-            $this->twitter = (!empty($params[0]['twitter']) ? $params[0]['twitter'] : null);
-            $this->youtube = (!empty($params[0]['youtube']) ? $params[0]['youtube'] : null);
-            $this->instagram = (!empty($params[0]['instagram']) ? $params[0]['instagram'] : null);
-            $this->website = (!empty($params[0]['website']) ? $params[0]['website'] : null);
+            $this->facebook     = (!empty($params[0]['facebook'])       ? $params[0]['facebook']    : null);
+            $this->twitter      = (!empty($params[0]['twitter'])        ? $params[0]['twitter']     : null);
+            $this->youtube      = (!empty($params[0]['youtube'])        ? $params[0]['youtube']     : null);
+            $this->instagram    = (!empty($params[0]['instagram'])      ? $params[0]['instagram']   : null);
+            $this->website      = (!empty($params[0]['website'])        ? $params[0]['website']     : null);
         }
     }
 
@@ -152,30 +157,46 @@ class user_profile {
             <form action="" method="POST" class="edit_profile_form" name="edit_profile" enctype="multipart/form-data">
                 <label for="firstname">Firstname</label>
                 <input type="text" name="firstname" id="firstname" value="' . $this->fname . '">
+                
                 <label for="lastname">Lastname</label>
                 <input type="text" name="lastname" id="lastname" value="' . $this->lname . '">
+                
                 <label for="age">Age</label>
                 <input type="text" name="age" id="age" value="' . $this->age . '">
+                
                 <label for="location">Location</label>
                 <input type="text" name="location" id="location" value="' . $this->location . '">
                 
+
                 <label for="website">Website</label>
                 <input type="text" name="website" id="website" value="' . $this->website . '">
+                
                 <label for="facebook">Facebook</label>
                 <input type="text" name="facebook" id="facebook" value="' . $this->facebook . '">
+                
                 <label for="twitter">Twitter</label>
                 <input type="text" name="twitter" id="twitter" value="' . $this->twitter . '">
+                
                 <label for="youtube">Youtube</label>
                 <input type="text" name="youtube" id="youtube" value="' . $this->youtube . '">
+                
                 <label for="instagram">Instagram</label>
                 <input type="text" name="instagram" id="instagram" value="' . $this->instagram . '">
-                
+
+
                 <label for="profilepic">Profile Picture</label>
-                <input type="file" name="profilepic" id="profilepic">
+                <input type="file" name="profilepic" id="proImgInput">
                 
-                <label for="profileheader">Profile Header</label>
-                <input type="file" name="profileheader" id="profileheader">
+                <label for="profileheader ">Profile Header</label>
+                <input type="file" name="profileheader" id="proImgInputTwo"/>
                 
+                <label for="">Profile Preview: </label>
+                <div class="preview_pro">
+                    <img id="targetImgInputTwo" src="' . $this->profileImgLoc . $this->headerImg. '" />
+                    <img id="targetImgInput" src="' . $this->profileImgLoc . $this->profileImg. '" />
+                </div>
+
+
                 <input type="hidden" name="profilePicOld" value="' . $this->profileImg . '">
                 <input type="hidden" name="headerPicOld" value="' . $this->headerImg . '">
                 <input type="hidden" name="type" id="type" value="edit_profile">
@@ -191,10 +212,10 @@ class user_profile {
         <div class="header">
             <div class="pro-head">
                 <div class="pro-head-img">
-                    <img src="' . $this->imgLoc . $this->headerImg . '" alt="" />
+                    <img src="' . $this->profileImgLoc . $this->headerImg . '" alt="" />
                 </div>
                 <div class="pro-img">
-                    <img src="' . $this->imgLoc . $this->profileImg . '"/>
+                    <img src="' . $this->profileImgLoc . $this->profileImg . '"/>
                 </div>
                 <div class="pro-name">
                     '. $this->username .'
@@ -235,11 +256,11 @@ class user_profile {
                 $string .= '
                 <div class="info-title">Social</div>
                 <ul class="social-list" >';
-                    $string .= (!is_null($this->facebook) ? '<li><a href=""><i class="icon-facebook-sign"></i><span>/</span>' . $this->facebook . '</a></li>' : '');
-                    $string .= (!is_null($this->twitter) ? '<li><a href=""><i class="icon-twitter-sign"></i><span>/</span>' . $this->twitter . '</a></li>' : '');
-                    $string .= (!is_null($this->youtube) ? '<li><a href=""><i class="icon-youtube-play"></i> <span>/</span>' . $this->youtube . '</a></li>' : '');
-                    $string .= (!is_null($this->instagram) ? '<li><a href=""><i class="icon-instagram"></i> <span>/</span>' . $this->instagram . '</a></li>' : '');
-                    $string .= (!is_null($this->website) ? '<li><a href=""><i class="icon-globe"></i> <span>/</span>' . $this->website . '</a></li>' : '');
+                    $string .= (!is_null($this->facebook)   ? '<li><a href=""><i class="icon-facebook-sign"></i><span>/</span>' . $this->facebook . '</a></li>' : '');
+                    $string .= (!is_null($this->twitter)    ? '<li><a href=""><i class="icon-twitter-sign"></i><span>/</span>' . $this->twitter . '</a></li>' : '');
+                    $string .= (!is_null($this->youtube)    ? '<li><a href=""><i class="icon-youtube-play"></i> <span>/</span>' . $this->youtube . '</a></li>' : '');
+                    $string .= (!is_null($this->instagram)  ? '<li><a href=""><i class="icon-instagram"></i> <span>/</span>' . $this->instagram . '</a></li>' : '');
+                    $string .= (!is_null($this->website)    ? '<li><a href=""><i class="icon-globe"></i> <span>/</span>' . $this->website . '</a></li>' : '');
                 $string .= '</ul >';
             }
 
@@ -258,20 +279,13 @@ class user_profile {
 
     public function overview() {
         $string = '
-        <h4>Recently Played games</h4>
+        <h4>Bio</h4>
+        -
+        <h4>Game Accounts</h4>
+        -
+
+        <h4>Played Games</h4>
         <div class="game-list">
-          <div class="game-cover">
-            <div class="game-cov-img">
-              <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
-            </div>
-            <div class="game-cov-title">CS:GO</div>
-          </div>
-                  <div class="game-cover">
-            <div class="game-cov-img">
-              <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
-            </div>
-            <div class="game-cov-title">CS:GO</div>
-          </div>
           <div class="game-cover">
             <div class="game-cov-img">
               <a href="#"><img src="http://vignette2.wikia.nocookie.net/callofduty/images/7/76/Game_cover_art_BOIII.jpg/revision/latest/scale-to-width-down/300?cb=20160211194000" alt="" /></a>
@@ -292,9 +306,22 @@ class user_profile {
     }
 
     public function teams() {
-        $string = "This will have the layout for the teams section";
+        $team = new teams($this->db);
+        $data = $team->display_user_teams($this->userID);
 
-        $string .= '<div style="border: 1px solid red">Testing for the Teams Div</div>';
+        $string = '<div class="t_holder">';
+
+        for($i=0; $i<count($data); $i++){
+            $string .= '
+            <div class="t_box">
+                <a href="#">
+                    <img src="' . $this->teamsImgLoc . $data[$i]['teamImg'] . '" alt="" />
+                    <span class="t_name">' . $data[$i]['name'] . '</span>
+                </a>
+            </div>';
+        }
+
+        $string .= '</div>';
 
         return $string;
     }

@@ -18,14 +18,15 @@ $data = $db->QUERY($selData);
  */
 
 class database{
-    protected $link, $num_rows, $debug;   
+    protected $link, $num_rows, $debug, $response;   
 	protected $rs = array();
 	protected $err = array();
 
-    public function __construct($db_host, $db_user, $db_pass, $db_name, $debug){
+    public function __construct($db_host, $db_user, $db_pass, $db_name, $debug, \response $response){
         $this->link = mysqli_connect($db_host, $db_user, $db_pass);
         mysqli_select_db($this->link, $db_name);
 		$this->debug = $debug;
+		$this->response = $response;
     }
 
 	/* UPDATE DATA IN DATABASE */
@@ -48,7 +49,7 @@ class database{
 				if (!$stmt->execute()) {
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
-				array_push($this->rs, 'Update Successful');
+				array_push($this->rs, $this->response->success("update"));
 				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
@@ -65,6 +66,7 @@ class database{
 		}
 
 	}
+
 	/* SELECT DATA FROM DATABASE */
 	public function SELECT($sql, $args=null) {
 		unset($this->rs);
@@ -92,7 +94,7 @@ class database{
 						array_push($this->rs, $row);
 					}
 				} else {
-					array_push($this->rs, "No data has been returned.");
+					array_push($this->rs, $this->response->error("select"));
 				}
 				$stmt->close();
 			} else {
@@ -130,7 +132,7 @@ class database{
 				if (!$stmt->execute()) {
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
-				array_push($this->rs, "Insert Successful");
+				array_push($this->rs, $this->response->success("insert"));
 				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
@@ -168,7 +170,7 @@ class database{
 				if (!$stmt->execute()) {
 					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
 				}
-				array_push($this->rs, "Delete Successful");
+				array_push($this->rs, $this->response->success("delete"));
 				$stmt->close();
 			} else {
 				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));

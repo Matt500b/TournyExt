@@ -5,7 +5,7 @@ $edit = $_GET['edit'];
 
 include_once '../../includes/form_actions.php';
 
-$pclass = new user_profile($db, $pid, $username);
+$pclass = new user_profile($db, $pid, $username, $userID);
 
 echo '<div class="wrapper">';
 
@@ -42,21 +42,20 @@ else if(isset($pid)) {
                 <a href="?view=profile&pid=' . $pid . '&page=history">History</a>
                 <a href="">Matches</a>
             </div>
-            <div class="inner-padding">
-                <h4>Info Shown Below Is Switched:</h4>';
-        switch ($profilePage) {
-            case 'overview':
-                echo $pclass->overview();
-                break;
-            case 'teams':
-                echo $pclass->teams();
-                break;
-            case 'history':
-                echo $pclass->gameHistory();
-                break;
-            default:
-                echo $pclass->overview();
-        }
+            <div class="inner-padding">';
+                switch ($profilePage) {
+                    case 'overview':
+                        echo $pclass->overview();
+                        break;
+                    case 'teams':
+                        echo $pclass->teams();
+                        break;
+                    case 'history':
+                        echo $pclass->gameHistory();
+                        break;
+                    default:
+                        echo $pclass->overview();
+                }
         echo '
             </div>
         </div>

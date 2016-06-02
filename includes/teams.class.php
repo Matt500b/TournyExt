@@ -3,7 +3,7 @@
 class teams {
     private $db;
     private $password;
-    private  $salt;
+    private $salt;
 
     public $name;
     public $abv;
@@ -11,6 +11,41 @@ class teams {
     public $logo;
 
     public $err_msg;
+
+    public function __construct(\database $db) {
+        $this->db = $db;
+    }
+
+    public function display_user_teams($user) {
+        $data = $this->db->SELECT("SELECT t1.name, t1.abv, t1.teamImg, t2.team_id, t3.role 
+                            FROM teams AS t1 
+                            INNER JOIN teams_players AS t2
+                            ON t1.id=t2.team_id  
+                            INNER JOIN teams_roles AS t3 
+                            ON t2.role_id = t3.role_id 
+                            WHERE t2.player_id = ?", array('i', $user));
+        
+        return $data;
+    }
+
+    public function display_team($tid) {
+        date_default_timezone_set(TIMEZONE);
+        $teamData = $this->db->SELECT("SELECT * FROM teams WHERE name = ?", array("i", $tid));
+        $teamMembers = $this->db->SELECT("SELECT t1.*, t2.username, t3.*, t4.role FROM teams_players AS t1 
+                                        INNER JOIN users AS t2 ON t1.player_id = t2.id
+                                        INNER JOIN users_info AS t3 ON t2.id = t3.user_id
+                                        INNER JOIN teams_roles AS t4 ON t1.role_id = t4.role_id 
+                                        WHERE t1.team_id = ?", array('i', $tid));
+        $this->name = $teamData[0]['name'];
+        $this->abv = $teamData[0]['abv'];
+
+        $string = '
+            <div>' . $this->name . '</div>
+            <div>' . $this->abv . '</div>
+        ';
+
+        return $teamMembers;
+    }
 
     public function create_team_form() {
         $string = '
@@ -41,30 +76,9 @@ class teams {
         return $string;
     }
 
-    public function display_team(\database $db, $tid) {
-        date_default_timezone_set(TIMEZONE);
-        $this->db = $db;
-        $teamData = $this->db->SELECT("SELECT * FROM teams WHERE name = ?", array("i", $tid));
-        $teamMembers = $this->db->SELECT("SELECT t1.*, t2.username, t3.*, t4.role FROM teams_players AS t1 
-                                        INNER JOIN users AS t2 ON t1.player_id = t2.id
-                                        INNER JOIN users_info AS t3 ON t2.id = t3.user_id
-                                        INNER JOIN teams_roles AS t4 ON t1.role_id = t4.role_id 
-                                        WHERE t1.team_id = ?", array('i', $tid));
-        $this->name = $teamData[0]['name'];
-        $this->abv = $teamData[0]['abv'];
-
-        $string = '
-            <div>' . $this->name . '</div>
-            <div>' . $this->abv . '</div>
-        ';
-
-        return $teamMembers;
-    }
-
-    public function create_team(\database $db, $name="", $abv="", $password="", $website="", $logo="", $uid=null) {
+    public function create_team($name="", $abv="", $password="", $website="", $logo="", $uid=null) {
         date_default_timezone_set(TIMEZONE);
         $creation_role = 2;
-        $this->db = $db;
         $this->name = (isset($name) ? $name : "");
         $this->abv = (isset($abv) ? $abv : "");
         $this->website = (isset($website) ? $website : "");
