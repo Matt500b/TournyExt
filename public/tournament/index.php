@@ -2,10 +2,15 @@
 	include '../../includes/functions.php';
 
 	sec_session_start();
-	include 'headers/set_session_variables.php';
+
+	include '../../includes/form_actions.php';
+	if(isset($_SESSION['username'])) {
+		$user = new user($db, $_SESSION['user_id'], $_SESSION['username'], $_SESSION['lastActive']);
+	}
 
 	include "headers/header.php";
 	include "headers/navbar.php";
+	
 
 
 	$view = 'index';
@@ -17,9 +22,15 @@
 				$view = $tmp_view;
 			//}
 		}
+		else {
+			$view = "404";
+		}
+
 	}
-	
+
+	echo '<div class="wrapper">';
 	include "templates/{$view}.php";
+	echo '</div>';
 
 	include "headers/footer.php";
 ?>

@@ -3,12 +3,7 @@ $pid = $_GET['pid'];
 $profilePage = $_GET['page'];
 $edit = $_GET['edit'];
 
-include_once '../../includes/form_actions.php';
-
-$pclass = new user_profile($db, $pid, $username, $userID);
-
-echo '<div class="wrapper">';
-
+$pclass = new user_profile($db, $pid, $user->username);
 
 //
 // Display edit profile
@@ -74,4 +69,4 @@ else if(isset($pid)) {
 else {
     echo 'No user selected. How to handle this :)?';
 }
-echo '</div>';
+

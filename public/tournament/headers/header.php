@@ -26,6 +26,7 @@
     <script type="text/JavaScript" src="js/user_menu.js"></script>
     <script type="text/JavaScript" src="js/img_config.js"></script>
     <script type="text/JavaScript" src="js/noti.js"></script>
+    <script type="text/JavaScript" src="js/errorPages.js"></script>
 
 
 </head>

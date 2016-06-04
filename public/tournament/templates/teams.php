@@ -2,24 +2,19 @@
 
 $action = $_GET['action'];
 $tid = $_GET['tid'];
+$team = new display_team($db, $response);
 
-include_once '../../includes/form_actions.php';
+echo $return_msg;
 
+switch($action) {
+    case 'create':
+        echo $team->create_team_form();
+        break;
 
-echo '<div class="wrapper">';
+    case 'display':
+        var_dump($team->display_team($tid));
+        break;
 
-    echo $return_msg;
-
-    switch($action) {
-        case 'create':
-            $team = new teams($db);
-            echo $team->create_team_form();
-            break;
-        case 'display':
-            $team = new teams($db);
-            var_dump($team->display_team($tid));
-            break;
-        default:
-            echo "stuff";
-    }
-echo '</div>';
+    default:
+        echo "stuff";
+}

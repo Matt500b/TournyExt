@@ -10,10 +10,10 @@
         </div>
         <div id="user">
             <?php
-            if($loggedIn) {
+            if($user->loggedIn) {
                 echo '
                                     <div class="simple-dd-menu">
-                                        ' . $username . '
+                                        ' . $user->username . '
                                         <img src="https://avatars2.githubusercontent.com/u/17126397?v=3&s=460" alt="" />
                                         <div class="drop-down-tri"></div>
                                         <ul>
@@ -24,7 +24,7 @@
                                             <li class="dd-line"></li>
                                             <li><a href="?view=teams&action=create">+ Create a Team</a></li>
                                             <li class="dd-line"></li>
-                                            <li><a href="?view=profile&pid=' . $username . '">Profile</a></li>
+                                            <li><a href="?view=profile&pid=' . $user->username . '">Profile</a></li>
                                             <li><a href="#">Teams</a></li>
                                             <li><a href="#profile">Report a problem</a></li>
                                             <li class="dd-line"></li>
@@ -33,7 +33,7 @@
                                     </div>';
             }
             else {
-                echo '<a class="btn login" href="login.php">Login</a><br><a class="btn register" href="register.php">Register</a>';
+                echo '<a class="btn login" href="?view=login">Login</a><br><a class="btn register" href="?view=register">Register</a>';
             }
             ?>
         </div>
