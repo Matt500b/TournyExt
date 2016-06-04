@@ -37,3 +37,18 @@ form.reg_form{
 .reg_form input[type="button"]:hover{
   box-shadow: inset 0 0 10px rgba(0,0,0,0.5)
 }
+/*CSS to make default submit button for all forms */
+
+input[type="button"]{
+  background-color: #1A84FF;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 4px;
+}
+input[type="button"]:hover{
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5)
+}

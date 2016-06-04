@@ -1,0 +1,66 @@
+.part_info{
+    width: 350px;
+    background-color: #f1f1f1;
+    text-align: center;
+    display: inline-block;
+    margin: 10px
+}
+.part_info .game-type{
+    position: relative;
+    overflow: hidden;
+}
+.part_info .game-type img{
+    width:100%;
+}
+.part_info .game-type h1{
+    font-size: 27px;
+    position: absolute;
+    bottom: 0;
+    left:4px;
+    color: #333;
+    background-color: rgba(255,255,255,0.9);
+    display: inline-block;
+    padding: 5px 10px;
+    box-shadow: 4px 4px 0 0px rgba(255,255,255,0.7)
+}
+.part_info ul{
+    text-transform: uppercase;
+    list-style: none;
+    padding: 5px 0;
+    margin:0;
+    margin-top: 10px;
+}
+.part_info ul li{
+    display: inline-block;
+}
+.part_info ul li a{
+    background-color: #1A84FF;
+    color: white;
+    text-decoration: none;
+    padding: 7px 5px;
+    border-radius: 2px;
+}
+.event_table{
+    margin: 15px 0;
+}
+.event_table .data_enter{
+    color: #333;
+    font-weight: bold;
+    font-size: 19px;
+    margin: 5px 0;;
+}
+.event_table .data_title{
+    margin-left: 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom:5px;
+    color: #1A84FF;
+    font-weight: bold;
+    background-color: #e2e2e2;
+    padding: 8px 5px;
+    text-align: left;
+    width: 90%;
+    border-left: 3px solid  #1A84FF;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.1)
+
+}
