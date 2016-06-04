@@ -5,21 +5,24 @@ class response {
 
     public function __construct() {
         $this->error = [
-                            "create_team"   => "Failed to create team.",
-                            "select"        => "No data has been returned.",
-                            "login"         => "Login Failed. Please try again",
-                            "emailNotValid" => "The email address you entered is not valid.",
-                            "serverError"   => "Something went wrong on the server. Please contact an administrator.",
-                            "emailExist"    => "A user with this email address already exists.",
-                            "usernameExist" => "A user with this username already exists."
+                            "create_team"       => "Failed to create team.",
+                            "select"            => "No data has been returned.",
+                            "login"             => "Login Failed. Please try again",
+                            "register"          => "Registration Successful.",
+                            "emailNotValid"     => "The email address you entered is not valid.",
+                            "serverError"       => "Something went wrong on the server. Please contact an administrator.",
+                            "emailExist"        => "A user with this email address already exists.",
+                            "usernameExist"     => "A user with this username already exists.",
+                            "teamNameExist"     => "A team with this name already exists.",
+                            "wrongMethodChosen" => "You tried to use the wrong method for your query."
         ];
 
         $this->success = [
-                            "insert"        => "Insert Successful.",
-                            "update"        => "Update Successful.",
-                            "create_team"   => "Created team successfully.",
-                            "login"         => "Login Successful.",
-                            "register"      => "Registration Successful."
+                            "insert"            => "Insert Successful.",
+                            "update"            => "Update Successful.",
+                            "create_team"       => "Created team successfully.",
+                            "login"             => "Login Successful.",
+                            "register"          => "Registration Successful."
         ];
 
         $this->redirect = "Redirecting you shortly.";

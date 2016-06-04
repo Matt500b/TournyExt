@@ -19,26 +19,26 @@ $data = $db->QUERY($selData);
 
 class database{
     protected $link, $num_rows, $debug, $response;   
-	protected $rs = array();
+	protected $resultSet = array();
 	protected $err = array();
 
     public function __construct($db_host, $db_user, $db_pass, $db_name, $debug, \response $response){
-        $this->link = mysqli_connect($db_host, $db_user, $db_pass);
-        mysqli_select_db($this->link, $db_name);
+        $this->link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+
 		$this->debug = $debug;
 		$this->response = $response;
     }
 
 	/* UPDATE DATA IN DATABASE */
 	public function UPDATE($sql, $args=null) {
-		unset($this->rs);
+		unset($this->resultSet);
 		unset($this->err);
-		$this->rs = array();
+		$this->resultSet = array();
 		$this->err = array();
 
 		$match = $this->match_sql($sql, "update");
 		if (!$match) {
-			array_push($this->err, 'You tried to use the wrong method for your query');
+			array_push($this->err, $this->response->error("wrongMethodChosen"));
 		}
 		else {
 			if ($stmt = $this->link->prepare($sql)) {
@@ -47,12 +47,12 @@ class database{
 					$method->invokeArgs($stmt, $this->refValues($args));
 				}
 				if (!$stmt->execute()) {
-					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+					array_push($this->err, array('status'=>0, 'message' => 'execute() failed: ' . htmlspecialchars($stmt->error)));
 				}
-				array_push($this->rs, $this->response->success("update"));
+				array_push($this->resultSet, $this->response->success("update"));
 				$stmt->close();
 			} else {
-				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+				array_push($this->err, array('status'=>0, 'message' => 'prepare() failed: ' . htmlspecialchars($this->link->error)));
 			}
 		}
 
@@ -62,21 +62,21 @@ class database{
 			}
 		}
 		else {
-			return $this->rs;
+			return $this->resultSet;
 		}
 
 	}
 
 	/* SELECT DATA FROM DATABASE */
 	public function SELECT($sql, $args=null) {
-		unset($this->rs);
+		unset($this->resultSet);
 		unset($this->err);
-		$this->rs = array();
+		$this->resultSet = array();
 		$this->err = array();
 
 		$match = $this->match_sql($sql, "select");
 		if (!$match) {
-			array_push($this->err, 'You tried to use the wrong method for your query');
+			array_push($this->err, $this->response->error("wrongMethodChosen"));
 		}
 		else {
 			if ($stmt = $this->link->prepare($sql)) {
@@ -85,20 +85,20 @@ class database{
 					$method->invokeArgs($stmt, $this->refValues($args));
 				}
 				if (!$stmt->execute()) {
-					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+					array_push($this->err, array('status'=>0, 'message' => 'execute() failed: ' . htmlspecialchars($stmt->error)));
 				}
 				$result = $stmt->get_result();
 
 				if ($result) {
 					while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-						array_push($this->rs, $row);
+						array_push($this->resultSet, $row);
 					}
 				} else {
-					array_push($this->rs, $this->response->error("select"));
+					array_push($this->resultSet, $this->response->error("select"));
 				}
 				$stmt->close();
 			} else {
-				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+				array_push($this->err, array('status'=>0, 'message' => 'prepare() failed: ' . htmlspecialchars($this->link->error)));
 			}
 		}
 
@@ -108,20 +108,20 @@ class database{
 			}
 		}
 		else {
-			return $this->rs;
+			return $this->resultSet;
 		}
 	}
 
 	/* INSERT DATA INTO THE DATABASE */
 	public function INSERT($sql, $args=null) {
-		unset($this->rs);
+		unset($this->resultSet);
 		unset($this->err);
-		$this->rs = array();
+		$this->resultSet = array();
 		$this->err = array();
 
 		$match = $this->match_sql($sql, "insert");
 		if (!$match) {
-			array_push($this->err, 'You tried to use the wrong method for your query');
+			array_push($this->err, $this->response->error("wrongMethodChosen"));
 		}
 		else {
 			if ($stmt = $this->link->prepare($sql)) {
@@ -130,12 +130,12 @@ class database{
 					$method->invokeArgs($stmt, $this->refValues($args));
 				}
 				if (!$stmt->execute()) {
-					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+					array_push($this->err, array('status'=>0, 'message' => 'execute() failed: ' . htmlspecialchars($stmt->error)));
 				}
-				array_push($this->rs, $this->response->success("insert"));
+				array_push($this->resultSet, $this->response->success("insert"));
 				$stmt->close();
 			} else {
-				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+				array_push($this->err, array('status'=>0, 'message' => 'prepare() failed: ' . htmlspecialchars($this->link->error)));
 			}
 
 		}
@@ -146,20 +146,20 @@ class database{
 			}
 		}
 		else {
-			return $this->rs;
+			return $this->resultSet;
 		}
 	}
 
 	/* DELETE DATA FROM THE DATABASE */
 	public function DELETE($sql, $args=null) {
-		unset($this->rs);
+		unset($this->resultSet);
 		unset($this->err);
-		$this->rs = array();
+		$this->resultSet = array();
 		$this->err = array();
 
 		$match = $this->match_sql($sql, "delete");
 		if (!$match) {
-			array_push($this->err, 'You tried to use the wrong method for your query');
+			array_push($this->err, $this->response->error("wrongMethodChosen"));
 		}
 		else {
 			if ($stmt = $this->link->prepare($sql)) {
@@ -168,12 +168,12 @@ class database{
 					$method->invokeArgs($stmt, $this->refValues($args));
 				}
 				if (!$stmt->execute()) {
-					array_push($this->err, 'execute() failed: ' . htmlspecialchars($stmt->error));
+					array_push($this->err, array('status'=>0, 'message' => 'execute() failed: ' . htmlspecialchars($stmt->error)));
 				}
-				array_push($this->rs, $this->response->success("delete"));
+				array_push($this->resultSet, $this->response->success("delete"));
 				$stmt->close();
 			} else {
-				array_push($this->err, 'prepare() failed: ' . htmlspecialchars($this->link->error));
+				array_push($this->err, array('status'=>0, 'message' => 'prepare() failed: ' . htmlspecialchars($this->link->error)));
 			}
 
 		}
@@ -184,7 +184,7 @@ class database{
 			}
 		}
 		else {
-			return $this->rs;
+			return $this->resultSet;
 		}
 	}
 
@@ -225,7 +225,7 @@ class database{
 
 	/* RETURNS ID OF THE LAST QUERY FROM THE INSERT QUERY */    
     public function INSERT_ID(){
-     return $this->rs = mysqli_insert_id($this->link);
+     return $this->resultSet = mysqli_insert_id($this->link);
     }
 
 	/* CHECK THE SQL QUERY BASED */
@@ -360,5 +360,40 @@ class database{
 		}
 		return $arr;
 	}
+	
+	
 }
 
+class testDB {
+	protected $link, $num_rows, $debug;
+	protected $resultSet = array();
+	protected $err = array();
+	public $string;
+
+	public function __construct($db_host, $db_user, $db_pass, $db_name, $debug){
+		$this->link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+
+		$this->debug = $debug;
+	}
+
+	public function SELECT($cols=null) {
+		$this->string = "SELECT";
+		
+		for($i=0; $i<count($cols); $i++) {
+			$this->string .= ' ' . $cols[$i];
+		}
+
+		return $this;
+	}
+	public function FROM($table) {
+		$this->string .= " FROM " . $table;
+		return $this;
+	}
+	public function WHERE($col) {
+		$this->string .= " WHERE " . $col . " = ?";
+		return $this;
+	}
+	public function RUN() {
+		return $this->string;
+	}
+}
