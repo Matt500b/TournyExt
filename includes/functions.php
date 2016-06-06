@@ -1,26 +1,22 @@
 <?php
 include_once 'settings.php';
 
-include_once 'cup.class.php';
-include_once 'database.class.php';
-include_once 'mailer.class.php';
-include_once 'processing.class.php';
-include_once 'responses.class.php';
-include_once 'teams.class.php';
-include_once 'user.class.php';
-/*foreach (glob('../../includes/class/*.class.php', GLOB_NOCHECK) as $filename) {
+// Includes all the class files
+foreach (glob(INCLUDESPATH . 'class/*.class.php', GLOB_NOCHECK) as $filename) {
     include_once $filename;
-}*/
+}
 
 
-/* Setting the error_reporting value depending on DEBUG value */
-if(DEBUG) { error_reporting(E_ALL & ~E_NOTICE); } else { error_reporting(0);}
+/* Instantiating a class of error pages and set reporting values */
+$errorPages = new error(DEBUG);
 
 /* Instantiating a class of reporting*/
 $response = new response();
 
 /* Instantiating a class for the database*/
 $db = new database(HOST, USER, PASSWORD, DATABASE, DEBUG, $response);
+
+
 
 
 function hasPermission($id=null, $page=null, $db) {

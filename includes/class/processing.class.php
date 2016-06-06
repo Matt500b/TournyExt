@@ -2,7 +2,7 @@
 
 class processing {
 
-    private $db, $response, $mailer, $email, $password;
+    private $db, $response, $mail, $email, $password;
 
     public function __construct(\database $db, \response $response) {
         date_default_timezone_set(TIMEZONE);
@@ -73,17 +73,20 @@ class processing {
             $password = filter_input(INPUT_POST, 'p', FILTER_SANITIZE_STRING);
             if (strlen($password) != 128) {
                 $return_msg = $this->response->error('serverError');
-            } else {
+            } 
+            else {
                 $emailCheck = $this->db->SELECT('SELECT id FROM users WHERE email = ? LIMIT 1', array('s', $email));
 
                 if (!empty($emailCheck)) {
                     $return_msg = $this->response->error('emailExist');
-                } else {
+                } 
+                else {
                     $usernameCheck = $this->db->SELECT('SELECT id FROM users WHERE username = ? LIMIT 1', array('s', $username));
 
                     if (!empty($usernameCheck)) {
                         $return_msg = $this->response->error('usernameExist');
-                    } else {
+                    } 
+                    else {
 
                         $random_salt = mcrypt_create_iv(24, MCRYPT_DEV_URANDOM);
 
@@ -102,7 +105,7 @@ class processing {
                         $insert = $this->db->INSERT('INSERT INTO users (id, username, email, password, salt, created_at, permissions) VALUES (?,?,?,?,?,?,?)', array('isssssi', $insID, $username, $email, $password, $random_salt, $now->format('Y-m-d H:i:s'), $default_permission));
                         $insert2 = $this->db->INSERT('INSERT INTO users_info (user_id) VALUES (?)', array('i', $insID));
 
-                        $mail = new mailer($this->db);
+                        $this->mail = new mailer($this->db);
                         $mailer = $this->mail->sendActivationEmail($username, $email);
 
                         if ($insert[0]['status'] == 1 && $insert2[0]['status'] == 1 && $mailer['status'] == 1) {
@@ -119,8 +122,40 @@ class processing {
         return $return_msg;
     }
 
-    public function activate() {
+    public function activate($email, $link)
+    {
+        $data = $this->db->SELECT("SELECT * FROM `activations` WHERE email = ?", array("s", $email));
 
+        if (empty($data)) {
+            $return_msg = $this->response->error('noActivationLink');
+        }
+        else {
+            $db_email = $data[0]['email'];
+            $db_link = $data[0]['link'];
+            $db_salt = $data[0]['salt'];
+
+            $options = [
+                'cost' => 11,
+                'salt' => $db_salt,
+            ];
+
+            $activationLink = password_hash($db_salt . $email, PASSWORD_DEFAULT, $options);
+
+            if ($db_link === $activationLink) {
+                $update = $this->db->UPDATE("UPDATE users SET permissions = 2 WHERE email = ?", array("s", $email));
+
+                if ($update[0]['status'] == 1) {
+                    $return_msg = $this->response->success('activation');
+                    $this->db->DELETE("DELETE FROM `activations` WHERE email = ?", array("s", $email));
+                } else {
+                    $return_msg = $this->response->error('activationUpdate');
+                }
+            } else {
+                $return_msg = $this->response->error('activation');
+            }
+        }
+
+        return $return_msg;
     }
     
     private function check_brute($id) {

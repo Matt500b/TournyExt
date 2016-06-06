@@ -3,11 +3,12 @@
 
 	sec_session_start();
 
-	include '../../includes/form_actions.php';
+
 	if(isset($_SESSION['username'])) {
 		$user = new user($db, $_SESSION['user_id'], $_SESSION['username'], $_SESSION['lastActive']);
 	}
 
+	include INCLUDESPATH . 'form_actions.php';
 	include "headers/header.php";
 	include "headers/navbar.php";
 	

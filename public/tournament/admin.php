@@ -9,7 +9,9 @@ if(isset($_SESSION['username'])) {
 include "headers/header.php";
 include "headers/navbar.php";
 
-if($user->permissionLevel >= 11) {
+echo '<div class="wrapper">';
+
+if($user->permissionLevel >= 10) {
     $view = 'index';
     if (!empty($_GET['view'])) {
         $tmp_view = basename($_GET['view']);
@@ -24,10 +26,13 @@ if($user->permissionLevel >= 11) {
 
     }
 
+
     include "admin/{$view}.php";
+
 }
 else {
     include "admin/401.php";
 }
+echo '</div>';
 include "headers/footer.php";
 ?>

@@ -12,5 +12,5 @@
     <input type="button" value="Login" onclick="formhash(this.form, this.form.password);">
 </form>
 
-<p>If you don't have a login, please <a href='register.php'>register</a></p>
-<p><a href='#'>Forgot password? (Not implemented yet)</a></p>
+<p>If you don't have a login, please <a href='?view=register'>register</a></p>
+<p><a href='?view=passwords&action=forgot_password'>Forgot password? (Not implemented yet)</a></p>

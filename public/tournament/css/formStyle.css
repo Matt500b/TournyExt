@@ -10,7 +10,7 @@ form.reg_form{
   color: #333;
   margin-top: 10px;
 }
-.reg_form input{
+.reg_form input, .reg_form textarea{
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 5px;
@@ -18,7 +18,7 @@ form.reg_form{
   background-color: #f8f8f8;
   box-shadow: inset 0 1px 5px rgba(0,0,0,0.1);
 }
-.reg_form input:focus{
+.reg_form input:focus,.reg_form textarea:focus{
   outline: none;
   border-color: #1A84FF;
   background-color: white;

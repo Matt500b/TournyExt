@@ -14,7 +14,7 @@
                 echo '
                                     <div class="simple-dd-menu">
                                         ' . $user->username . '
-                                        <img src="https://avatars2.githubusercontent.com/u/17126397?v=3&s=460" alt="" />
+                                        <img src="' . $user->profileImg . '" alt="" />
                                         <div class="drop-down-tri"></div>
                                         <ul>
                                             <li class="log_status">Online for <b>3m</b></li>

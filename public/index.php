@@ -9,18 +9,11 @@ echo '<a href="/tournament/index.php">Proceed to application...</a>';
 
 include_once '../includes/functions.php';
 
-function inArray($search, $in) {
-    if(array_key_exists($search, $in)) {
-        return $in[$search];
-    }
-    else {
-        return 'Message not listed in responses.class.php';
-    }
-}
+$db2 = new testDB(HOST, USER, PASSWORD, DATABASE, DEBUG);
 
-$array = [
-    "create_team"   => "Failed to create team.",
-    "select"        => "No data has been returned.",
-    "login"         => "Login Failed. Please try again"
-];
-echo inArray("login", $array);
+$data = $db2    ->SELECT(array("*"))
+                ->FROM("users_info")
+                ->WHERE("username")
+                ->RUN();
+
+echo $data;

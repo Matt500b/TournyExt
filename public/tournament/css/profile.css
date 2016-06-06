@@ -339,6 +339,18 @@ ul.social-list span{
     width: 500px;
     display: block;
     margin-bottom: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: #f8f8f8;
+    box-shadow: inset 0 1px 5px rgba(0,0,0,0.1);
+}
+.edit_profile form.edit_profile_form input:focus{
+    outline: none;
+    border-color: #1A84FF;
+    background-color: white;
+    box-shadow: inset 0 1px 5px rgba(0,0,0,0);
 }
 .submit_pro_form {
     background-color: #1A84FF;

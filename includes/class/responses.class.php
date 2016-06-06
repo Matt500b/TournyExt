@@ -8,21 +8,32 @@ class response {
                             "create_team"       => "Failed to create team.",
                             "select"            => "No data has been returned.",
                             "login"             => "Login Failed. Please try again",
-                            "register"          => "Registration Successful.",
+                            "register"          => "Registration Failed. Please contact an administrator.",
                             "emailNotValid"     => "The email address you entered is not valid.",
                             "serverError"       => "Something went wrong on the server. Please contact an administrator.",
                             "emailExist"        => "A user with this email address already exists.",
                             "usernameExist"     => "A user with this username already exists.",
                             "teamNameExist"     => "A team with this name already exists.",
-                            "wrongMethodChosen" => "You tried to use the wrong method for your query."
+                            "wrongMethodChosen" => "You tried to use the wrong method for your query.",
+                            "activation"        => "Failed to activate account. Please try again or contact an administrator.",
+                            "activationUpdate"  => "Updating you account failed. Please contact an administrator immediately.",
+                            "noActivationLink"  => "Your link appears to be invalid. Please try again or contact an administrator.",
+                            "emailNotExist"     => "The email you entered does not exist.",
+                            "reset_password"    => "Sending an email failed. Please contact an administrator.",
+                            "noResetLink"       => "Your link appears to be invalid. Please try again or contact an administrator.",
+                            "resetUpdate"       => "Updating you account failed. Please contact an administrator immediately.",
+                            "reset"             => "Failed to reset password. Please try again or contact an administrator."
         ];
 
         $this->success = [
                             "insert"            => "Insert Successful.",
                             "update"            => "Update Successful.",
-                            "create_team"       => "Created team successfully.",
+                            "create_team"       => "Created team successfully. An activation email has been sent to your email.",
                             "login"             => "Login Successful.",
-                            "register"          => "Registration Successful."
+                            "register"          => "Registration Successful.",
+                            "activation"        => "Activation Successful.",
+                            "reset_password"    => "Success. An email has been sent to your email with directions on how to reset your password.",
+                            "reset"             => "Reset Successful."
         ];
 
         $this->redirect = "Redirecting you shortly.";

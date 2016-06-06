@@ -2,7 +2,9 @@
 
 class user {
     private $db;
-    public $userID,$loggedIn, $username, $permissionLevel, $lastActive;
+    private $path = "images/profile/";
+
+    public $userID,$loggedIn, $username, $permissionLevel, $lastActive, $profileImg;
 
     public function __construct(\database $db, $userID, $username, $lastActive) {
         $this->db               = $db;
@@ -11,8 +13,9 @@ class user {
         $this->lastActive       = $lastActive;
         $this->loggedIn         = true;
 
-        $data = $this->db->SELECT("SELECT permissions FROM users WHERE id = ?", array('i', $this->userID));
+        $data = $this->db->SELECT("SELECT t1.permissions, t2.profileImg FROM users AS t1 INNER JOIN users_info AS t2 ON t1.id = t2.user_id WHERE id = ?", array('i', $this->userID));
         $this->permissionLevel  = $data[0]['permissions'];
+        $this->profileImg       = $this->path . $data[0]['profileImg'];
     }
 }
 
@@ -77,8 +80,8 @@ class edit_user_profile {
             $header = $this->headerImgOld;
         }
 
-        $update = $this->db->UPDATE("UPDATE `users_info` 
-                                    SET `fname`=?, `lname`=?, `location`=?, `age`=?, `headerImg`=?, `profileImg`=?, `facebook`=?, `twitter`=?, `youtube`=?, `instagram`=?, `website`=? 
+        $update = $this->db->UPDATE("UPDATE `users_info`
+                                    SET `fname`=?, `lname`=?, `location`=?, `age`=?, `headerImg`=?, `profileImg`=?, `facebook`=?, `twitter`=?, `youtube`=?, `instagram`=?, `website`=?
                                     WHERE `user_id` = ?",
                                     array('sssssssssssi',$this->fname, $this->lname, $this->location, $this->age, $header, $profile, $this->facebook, $this->twitter,
                                     $this->youtube, $this->instagram, $this->website, $this->viewer));
@@ -106,10 +109,10 @@ class user_profile {
         $this->username         = $pid;
         $this->viewer           = $viewer;
 
-        $params = $this->db->SELECT("SELECT users_info.*, users.username, users.id, users.lastOnline 
-                                    FROM users_info 
-                                    INNER JOIN users 
-                                    ON users.id = users_info.user_id 
+        $params = $this->db->SELECT("SELECT users_info.*, users.username, users.id, users.lastOnline
+                                    FROM users_info
+                                    INNER JOIN users
+                                    ON users.id = users_info.user_id
                                     WHERE users.username = ?",
                                     array('s', $this->username));
 
@@ -140,54 +143,54 @@ class user_profile {
             <h2>Edit your profile</h2>
             <div class="grey-line">    </div>
             <form action="" method="POST" class="edit_profile_form" name="edit_profile" enctype="multipart/form-data">
-            
+
                 <label for="">Profile Preview: </label>
                 <div class="preview_pro">
                     <img id="targetImgInputTwo" src="' . $this->profileImgLoc . $this->headerImg. '" />
                     <img id="targetImgInput" src="' . $this->profileImgLoc . $this->profileImg. '" />
                 </div>
-                
+
                 <label for="profilepic">Profile Picture</label>
                 <input type="file" name="profilepic" id="proImgInput">
-                
+
                 <label for="profileheader ">Profile Header</label>
                 <input type="file" name="profileheader" id="proImgInputTwo"/>
-                
+
                 <div class="dd-line"></div>
-                
+
                 <label for="firstname">Firstname</label>
                 <input type="text" name="firstname" id="firstname" value="' . $this->fname . '">
-                
+
                 <label for="lastname">Lastname</label>
                 <input type="text" name="lastname" id="lastname" value="' . $this->lname . '">
-                
+
                 <label for="age">Age</label>
                 <input type="text" name="age" id="age" value="' . $this->age . '">
-                
+
                 <label for="location">Location</label>
                 <input type="text" name="location" id="location" value="' . $this->location . '">
-                
+
                 <div class="dd-line"></div>
 
                 <label for="website">Website</label>
                 <input type="text" name="website" id="website" value="' . $this->website . '">
-                
+
                 <label for="facebook">Facebook</label>
                 <input type="text" name="facebook" id="facebook" value="' . $this->facebook . '">
-                
+
                 <label for="twitter">Twitter</label>
                 <input type="text" name="twitter" id="twitter" value="' . $this->twitter . '">
-                
+
                 <label for="youtube">Youtube</label>
                 <input type="text" name="youtube" id="youtube" value="' . $this->youtube . '">
-                
+
                 <label for="instagram">Instagram</label>
                 <input type="text" name="instagram" id="instagram" value="' . $this->instagram . '">
 
                 <input type="hidden" name="profilePicOld" value="' . $this->profileImg . '">
                 <input type="hidden" name="headerPicOld" value="' . $this->headerImg . '">
                 <input type="hidden" name="type" id="type" value="edit_profile">
-                <input type="submit" value="Edit profile" >
+                <button type="submit" value="Edit profile" >Save Edits</button>
             </form>
         </div>';
 
